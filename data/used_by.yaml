@@ -5,3 +5,7 @@
 - name: Yangshipin
   link: https://yangshipin.cn/
   image: https://s.yangshipin.cn/CCTVVideo/CCTVVideoAssets/v10/images/www/logo_head_color.png
+- name: Iqiyi
+  image: /img/iqiyi.png
+- name: Xiaohongshu
+  image: /img/xiaohongshu.png
