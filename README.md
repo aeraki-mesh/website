@@ -1,6 +1,6 @@
-# etcd.io
+# aeraki.net
 
-The [etcd.io][] website, built using [Hugo][] and hosted on [Netlify][].
+The [aeraki.net][] website, built using [Hugo][] and hosted on [Netlify][].
 
 ## Cloud build
 

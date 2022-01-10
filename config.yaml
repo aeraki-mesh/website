@@ -1,4 +1,4 @@
-baseURL: https://etcd.io
+baseURL: https://www.aeraki.net/
 enableRobotsTxt: true
 
 theme: [docsy]
@@ -34,12 +34,18 @@ imaging:
 
 languages:
   en:
-    title: etcd
+    title: aeraki
     description: >-
-      A distributed, reliable key-value store for the most critical data of a
-      distributed system
+      Manage any layer-7 protocols in a service mesh
     languageName: English
     contentDir: content/en
+    weight: 1
+  zh:
+    title: aeraki
+    description: >-
+      在服务网格中管理任何七层协议
+    languageName: 中文
+    contentDir: content/zh
     weight: 1
 
 markup:
@@ -55,17 +61,17 @@ markup:
 # Everything below this are Site Params
 
 params:
-  copyright: etcd Authors
+  copyright: aeraki Authors
   description: >-
     A distributed, reliable key-value store for the most critical data of a
     distributed system
 
     # Repository configuration (URLs for in-page links to opening issues and suggesting changes)
-  github_repo: https://github.com/etcd-io/website
+  github_repo: https://github.com/aeraki-framework/website
   github_branch: main
 
   # An optional link to a related project repo. For example, the sibling repository where your product code lives.
-  github_project_repo: https://github.com/etcd-io/etcd
+  github_project_repo: https://github.com/aeraki-framework
 
   # Enable Algolia DocSearch
   algolia_docsearch: false
@@ -82,14 +88,9 @@ params:
   # This menu appears only if you have at least one [params.versions] set.
   version_menu: Versions
   versions:
-    latest: v3.5
+    latest: v1.0
     all:
-      - v3.5
-      - v3.4
-      - v3.3
-      - v3.2
-      - v3.1
-      - v2.3
+      - v1.0
     deprecation_warning: |-
       the documentation is no longer actively maintained.
         The page that you are viewing is the last archived version.
@@ -112,11 +113,11 @@ params:
       # The responses that the user sees after clicking "yes" (the page was helpful) or "no" (the page was not helpful).
       'yes': >-
         Glad to hear it! Please <a
-        href="https://github.com/etcd-io/website/issues/new">tell us how we
+        href="https://github.com/aeraki-framework/website/issues/new">tell us how we
         can improve</a>.
       'no': >-
         Sorry to hear that. Please <a
-        href="https://github.com/etcd-io/website/issues/new">tell us how we
+        href="https://github.com/aeraki-framework/website/issues/new">tell us how we
         can improve</a>.
 
     # Adds a reading time to the top of each doc.
@@ -129,26 +130,24 @@ params:
   links:
     # End user relevant links. These will show up on left side of footer and in the community page if you have one.
     user:
-      - name: Google Group
-        url: https://groups.google.com/forum/?hl=en#!forum/etcd-dev
-        icon: fab fa-google
-      - name: Twitter
-        url: https://twitter.com/etcdio
-        icon: fab fa-twitter
+      - name: Slack
+        url: http://aeraki.slack.com/
+        icon: fab fa-slack
+      - name: Email
+        url: mailto:zhaohuabing@gmail.com
+        icon: fas fa-envelope
       - name: Stack Overflow
-        url: https://stackoverflow.com/questions/tagged/etcd
+        url: https://stackoverflow.com/questions/tagged/aeraki
         icon: fab fa-stack-overflow
     # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
     developer:
-      - name: Etcd on GitHub
-        url: https://github.com/etcd-io/etcd
+      - name: Aeraki on GitHub
+        url: https://github.com/aeraki-framework
         icon: fab fa-github-square
-      - name: Etcd.io on GitHub
-        url: https://github.com/etcd-io/website
+      - name: Aeraki.net on GitHub
+        url: https://github.com/aeraki-framework/website
         icon: fab fa-github
   # [params.logos]
-  hero: >-
-    https://raw.githubusercontent.com/cncf/artwork/master/projects/etcd/horizontal/white/etcd-horizontal-white.png
 
 mediaTypes:
   text/netlify: {}
@@ -166,11 +165,11 @@ outputs:
 menu:
   main:
     - name: Docs
-      url: /docs/latest/
+      url: /docs/v1.0/
       weight: -10
     - name: Blog
       pageref: /blog/
     - name: Install
-      url: /docs/latest/install/
-    - name: Play
-      url: http://play.etcd.io/play
+      url: /docs/v1.0/install/
+    - name: Demo
+      url: http://aeraki.zhaohuabing.com:3000/d/pgz7wp-Gz/aeraki-demo?orgId=1&refresh=10s&kiosk
