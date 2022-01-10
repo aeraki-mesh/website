@@ -1,4 +1,4 @@
 [submodule "themes/docsy"]
 	path = themes/docsy
-	url = git@github.com:cncf/docsy.git
+	url = https://github.com/cncf/docsy.git
   branch = etcd.io
