@@ -1,0 +1,14 @@
+# npm assets
+node_modules/
+package-lock.json
+
+# Hugo-generated assets
+.hugo_build.lock
+/public
+resources/
+
+# htmltest artifacts
+tmp/
+
+# Local Netlify folder
+.netlify
