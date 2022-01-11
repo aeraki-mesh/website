@@ -31,7 +31,7 @@ Follow these instructions to install, run, and test Aeraki:
 
 Learn about more ways to configure and use Aeraki from the following pages:
 
-- Traffic routing 
-- Local rate limit 
-- Global rate limit 
-- Implement a new protocol
+- [Traffic routing]() 
+- [Local rate limit]()
+- [Global rate limit]()
+- [Implement a new protocol]()

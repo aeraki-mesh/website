@@ -1,33 +1,33 @@
 ---
 title: Community
-description: Welcome to the etcd user and developer community page
+description: Welcome to the Aeraki user and developer community page
 spelling: cSpell:ignore grpcio grpcmeetings subreddit youtube
 main_channels:
   - title: >
-      [<i class="fab fa-google"></i>Google Group][etcd-dev]
+      [<i class="fab fa-google"></i>Google Group][aeraki-dev]
     desc: >
-      Join the [etcd-dev][] forum to ask questions and get the latest etcd news.
+      Join the [aeraki-dev][] forum to ask questions and get the latest Aeraki news.
   - title: >
-      [<i class="fab fa-twitter"></i>Twitter][@etcdio]
+      [<i class="fab fa-twitter"></i>Twitter][@aeraki]
     desc: >
-      Follow us at [@etcdio][] for real-time announcements, blogs posts, and more.
+      Follow us at [@aeraki][] for real-time announcements, blogs posts, and more.
   - title: >
       [<i class="fab fa-stack-overflow"></i>Stack Overflow][SO]
     desc: >
-      Ask and find answers to your etcd technical questions.
+      Ask and find answers to your aeraki technical questions.
 community_resources:
   - title: >
-      [<i class="fab fa-google"></i>Google Meet][online]
+      [<i class="fab fa-google"></i>Tencent Meeting][online]
     desc: >
       Join contributors and maintainers [online][], every four weeks.
   - title: >
       [<i class="fas fa-file-alt"></i>Meeting doc][meeting-doc]
     desc: >
-      For meeting details, consult the [etcd community meeting][meeting-doc] document.
+      For meeting details, consult the [Aeraki community meeting][meeting-doc] document.
   - title: >
-      [<i class="fab fa-youtube"></i>YouTube][etcd-youtube]
+      [<i class="fab fa-youtube"></i>YouTube][aeraki-youtube]
     desc: >
-      Missed a meeting? No problem. See the [etcd channel][etcd-youtube] for
+      Missed a meeting? No problem. See the [Aeraki channel][aeraki-youtube] for
       meeting videos.
 menu:
   main:
@@ -62,27 +62,23 @@ questions:
 
 ## Community meetings
 
-etcd contributors and maintainers meet [online][] every four weeks, on **Thursday
-at 11 AM** [Pacific Time][].
+Aeraki community don't hold meetings on a regular basis. An ad-hoc meeting will be proposed 
+when the community have some technical topics that need to be discussed.
 
 For phone-in information, the date of the next meeting, and minutes from past
-meetings, see [etcd community meeting][meeting-doc].
+meetings, see [Aeraki community meeting][meeting-doc].
 
 {{% cards "community_resources" %}}
 
 ## Contributing
 
-Your contributions to etcd code and documentation are welcome! If you find a
+Your contributions to Aeraki code and documentation are welcome! If you find a
 problem or would like an enhancement, create an issue -- or better yet, consider
 submitting a pull request.
 
-For etcd contribution guidelines, see [How to contribute][].
+For Aeraki contribution guidelines, see [How to contribute][].
 
 ## Additional community resources
-
-Our dedicated community has created the following resource:
-
-* [Chinese translation of etcd.io (本网站的中文翻译)](https://etcd.cn). The website is an independent project and isn't officially endorsed by etcd maintainers.
 
 </div>
 
@@ -94,11 +90,10 @@ Our dedicated community has created the following resource:
 
 </div>
 
-[@etcdio]: https://twitter.com/etcdio
-[etcd-dev]: https://groups.google.com/forum/?hl=en#!forum/etcd-dev
-[etcd-youtube]: https://www.youtube.com/channel/UC7tUWR24I5AR9NMsG-NYBlg
-[How to contribute]: https://github.com/etcd-io/etcd/blob/main/CONTRIBUTING.md
-[meeting-doc]: https://docs.google.com/document/d/16XEGyPBisZvmmoIHSZzv__LoyOeluC5a4x353CX0SIM
+[aeraki-dev]: https://groups.google.com/forum/?hl=en#!forum/aeraki-dev
+[aeraki-youtube]: https://www.youtube.com/channel/UC7tUWR24I5AR9NMsG-NYBlg
+[How to contribute]: https://github.com/aeraki-framework/aeraki/blob/main/CONTRIBUTING.md
+[meeting-doc]: https://docs.qq.com/doc/DVnlud2hTdHBHZUVs
 [online]: https://meet.google.com/umg-nrxn-qvs
 [Pacific Time]: https://www.timeanddate.com/time/zones/pt
-[SO]: https://stackoverflow.com/questions/tagged/etcd
+[SO]: https://stackoverflow.com/questions/tagged/aeraki

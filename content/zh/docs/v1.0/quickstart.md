@@ -1,61 +1,37 @@
 ---
 title: Quickstart
 weight: 900
-description: Get etcd up and running in less than 5 minutes!
+description: Get Aeraki up and running in less than 5 minutes!
 ---
 
-Follow these instructions to locally install, run, and test a single-member
-cluster of etcd:
+Follow these instructions to install, run, and test Aeraki:
 
- 1. Install etcd from pre-built binaries or from source. For details, see
-    [Install][].
-
-    {{% alert color="warning" %}}**Important**: Ensure that you perform the last
-    step of the installation instructions to verify that `etcd` is in your path.
-    {{% /alert %}}
-
- 2. Launch `etcd`:
+ 1. Download Aeraki from the github.
 
     ```console
-    $ etcd
-    {"level":"info","ts":"2021-09-17T09:19:32.783-0400","caller":"etcdmain/etcd.go:72","msg":... }
-    ⋮
+    git clone https://github.com/aeraki-framework/aeraki.git
     ```
 
-    {{% alert color="info" %}}**Note**: The output produced by `etcd` are
-    [logs](../op-guide/configuration/#logging) &mdash; info-level logs can
-    be ignored. {{% /alert %}}
-
- 3. From **another terminal**, use `etcdctl` to set a key:
+ 2. Install Istio, Aeraki and demo applications
 
     ```console
-    $ etcdctl put greeting "Hello, etcd"
-    OK
+    make install
     ```
 
- 4. From the same terminal, retrieve the key:
+    Note: Aeraki requires to enable [Istio DNS proxying](https://istio.io/latest/docs/ops/configuration/traffic-management/dns-proxy/). Please turn on DNS proxying if you are installing Aeraki with an existing Istio deployment, or you can use ```make install``` command to install Aeraki and Istio from scratch, ```install-demo.sh``` will take care of the Istio configuration.
 
-    ```console
-    $ etcdctl get greeting
-    greeting
-    Hello, etcd
-    ```
+ 3. Open the following URLs in your browser to play with Aeraki and view service metrics
+
+     - Kaili http://{istio-ingressgateway_external_ip}:20001
+     - Grafana http://{istio-ingressgateway_external_ip}:3000
+     - Prometheus http://{istio-ingressgateway_external_ip}:9090
+
 
 ## What's next?
 
-Learn about more ways to configure and use etcd from the following pages:
+Learn about more ways to configure and use Aeraki from the following pages:
 
-- Explore the gRPC [API][].
-- Set up a [multi-machine cluster][clustering].
-- Learn how to [configure][] etcd.
-- Find [language bindings and tools][integrations].
-- Use TLS to [secure an etcd cluster][security].
-- [Tune etcd][tuning].
-
-[api]: /docs/{{< param version >}}/learning/api
-[clustering]: /docs/{{< param version >}}/op-guide/clustering
-[configure]: /docs/{{< param version >}}/op-guide/configuration
-[integrations]: /docs/{{< param version >}}/integrations
-[security]: /docs/{{< param version >}}/op-guide/security
-[tuning]: /docs/{{< param version >}}/tuning
-[Install]: ../install/
+- [Traffic routing]() 
+- [Local rate limit]()
+- [Global rate limit]()
+- [Implement a new protocol]()

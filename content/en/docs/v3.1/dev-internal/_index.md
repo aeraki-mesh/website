@@ -1,3 +1,0 @@
----
-title: etcd internal dev
----
