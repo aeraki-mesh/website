@@ -1,0 +1,44 @@
+---
+# TODO(chalin): drop the `title` field once Hugo is fixed to use the site title
+title: aeraki
+features:
+  - title: Traffic Management
+    description: Request load balancing, dynamic routing with arbitrary match conditions, rate limit, traffic mirroring, data transformation
+    icon: traffic.svg
+  - title: Observability
+    description: Rich request-level metrics including request latency, errors, count, etc. Distributed tracing. 
+    icon: observability.svg
+  - title: Easy to Extend
+    description: Just need a couple lines of code to add a new protocol into a serivce mesh. 
+    icon: extension.svg
+---
+
+{{< blocks/cover image_anchor="top" height="min" color="primary" >}}
+<img src="aeraki-horizontal-white.png" class="site-logo" />
+<h2 class="mt-4">
+  Manage Any Layer-7 Protocol in A Service Mesh
+</h2>
+<div class="mt-5 mx-auto">
+	<a class="btn btn-lg btn-secondary mr-3 mb-4" href="/docs/{{< param versions.latest >}}/">
+		Learn more
+	</a>
+	<a class="btn btn-lg btn-primary mr-3 mb-4" href="/docs/{{< param versions.latest >}}/quickstart">
+		Quickstart<i class="fas fa-arrow-alt-circle-right ml-2"></i>
+	</a>
+</div>
+{{< /blocks/cover >}}
+
+{{% blocks/lead color="white" %}}
+  <h1>What is aeraki?</h1>
+  <p>
+    <b>Aeraki</b> is a cloud native solution to manage any layer-7 protocols in a service mesh. It supports Dubbo,
+    Thrift, Redis, and proprietary protocols can be supported as well with the help of MetaProtocol.
+    <a href="/docs/{{< param versions.latest >}}/">Learn more<i class="fas fa-arrow-alt-circle-right ml-2"></i></a>
+  </p>
+{{% /blocks/lead %}}
+
+<div class="container">
+  {{< home/features >}}
+  {{< home/used-by >}}
+  <!--{{< home/cncf >}}-->
+</div>

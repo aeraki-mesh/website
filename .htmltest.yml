@@ -1,0 +1,8 @@
+DirectoryPath: public
+IgnoreDirectoryMissingTrailingSlash: true
+IgnoreAltMissing: true
+IgnoreURLs:
+  - "^http://play.etcd.io.*"
+IgnoreInternalURLs:
+  - /docs/latest/
+  - /docs/latest/install/

@@ -1,0 +1,175 @@
+baseURL: https://www.aeraki.net/
+enableRobotsTxt: true
+
+theme: [docsy]
+
+# Will give values to .Lastmod etc.
+enableGitInfo: true
+
+# Language settings
+contentDir: content/en
+defaultContentLanguage: en
+defaultContentLanguageInSubdir: false
+languageCode: en-us
+googleAnalytics: UA-109223766-2
+
+# Useful when translating.
+enableMissingTranslationPlaceholders: true
+
+disableKinds: [taxonomy, term]
+
+# Highlighting config
+pygmentsCodeFences: true
+pygmentsUseClasses: false
+# Use the new Chroma Go highlighter in Hugo.
+#pygmentsOptions = "linenos=table"
+# See https://help.farbox.com/pygments.html
+pygmentsStyle: fruity # "tango"
+
+# Image processing configuration.
+imaging:
+  resampleFilter: CatmullRom
+  quality: 75
+  anchor: smart
+
+languages:
+  en:
+    title: aeraki
+    description: >-
+      Manage any layer-7 protocols in a service mesh
+    languageName: English
+    contentDir: content/en
+    weight: 1
+  zh:
+    title: aeraki
+    description: >-
+      在服务网格中管理任何七层协议
+    languageName: 中文
+    contentDir: content/zh
+    weight: 1
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    # See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
+    style: tango
+    # Uncomment if you want your chosen highlight style used for code blocks without a specified language
+    # guessSyntax: true
+
+# Everything below this are Site Params
+
+params:
+  copyright: aeraki Authors
+  description: >-
+    A distributed, reliable key-value store for the most critical data of a
+    distributed system
+
+    # Repository configuration (URLs for in-page links to opening issues and suggesting changes)
+  github_repo: https://github.com/aeraki-framework/website
+  github_branch: main
+
+  # An optional link to a related project repo. For example, the sibling repository where your product code lives.
+  github_project_repo: https://github.com/aeraki-framework
+
+  # Enable Algolia DocSearch
+  algolia_docsearch: false
+
+  # Enable Lunr.js offline search
+  offlineSearch: true
+
+  # Enable syntax highlighting and copy buttons on code blocks with Prism
+  prism_syntax_highlighting: false
+
+  # Versions
+
+  # Menu title if your navbar has a versions selector to access old versions of your site.
+  # This menu appears only if you have at least one [params.versions] set.
+  version_menu: Versions
+  versions:
+    latest: v1.0
+    all:
+      - v1.0
+    deprecation_warning: |-
+      the documentation is no longer actively maintained.
+        The page that you are viewing is the last archived version.
+
+  # User interface configuration
+  ui:
+    sidebar_menu_compact: true
+    breadcrumb_disable: false
+    sidebar_search_disable: false
+    navbar_logo: true
+    footer_about_disable: true
+    navbar_translucent_over_cover_disable: true
+
+    # Adds a H2 section titled "Feedback" to the bottom of each doc. The responses are sent to Google Analytics as events.
+    # This feature depends on [services.googleAnalytics] and will be disabled if "services.googleAnalytics.id" is not set.
+    # If you want this feature, but occasionally need to remove the "Feedback" section from a single page,
+    # add "hide_feedback: true" to the page's front matter.
+    feedback:
+      enable: true
+      # The responses that the user sees after clicking "yes" (the page was helpful) or "no" (the page was not helpful).
+      'yes': >-
+        Glad to hear it! Please <a
+        href="https://github.com/aeraki-framework/website/issues/new">tell us how we
+        can improve</a>.
+      'no': >-
+        Sorry to hear that. Please <a
+        href="https://github.com/aeraki-framework/website/issues/new">tell us how we
+        can improve</a>.
+
+    # Adds a reading time to the top of each doc.
+    # If you want this feature, but occasionally need to remove the Reading time from a single page,
+    # add "hide_readingtime: true" to the page's front matter
+    readingtime:
+      enable: false
+
+  # Footer Links
+  links:
+    # End user relevant links. These will show up on left side of footer and in the community page if you have one.
+    user:
+      - name: Slack
+        url: http://aeraki.slack.com/
+        icon: fab fa-slack
+      - name: Email
+        url: mailto:zhaohuabing@gmail.com
+        icon: fas fa-envelope
+      - name: Stack Overflow
+        url: https://stackoverflow.com/questions/tagged/aeraki
+        icon: fab fa-stack-overflow
+    # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
+    developer:
+      - name: Aeraki on GitHub
+        url: https://github.com/aeraki-framework
+        icon: fab fa-github-square
+      - name: Aeraki.net on GitHub
+        url: https://github.com/aeraki-framework/website
+        icon: fab fa-github
+  # [params.logos]
+
+mediaTypes:
+  text/netlify: {}
+
+outputFormats:
+  REDIRECTS:
+    mediaType: text/netlify
+    baseName: _redirects
+    notAlternative: true
+
+outputs:
+  home: [HTML, REDIRECTS, RSS]
+
+# Site menu (partial -- also see pages with 'menu' in front matter)
+menu:
+  main:
+    - name: Docs
+      url: /docs/v1.0/
+      weight: -10
+    - name: Blog
+      pageref: /blog/
+    - name: Install
+      url: /docs/v1.0/quickstart/
+    - name: Demo
+      url: http://aeraki.zhaohuabing.com:3000/d/pgz7wp-Gz/aeraki-demo?orgId=1&refresh=10s&kiosk
