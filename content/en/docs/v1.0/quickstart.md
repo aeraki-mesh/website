@@ -9,7 +9,7 @@ Follow these instructions to install, run, and test Aeraki:
  1. Download Aeraki from the github.
 
     ```console
-    git clone https://github.com/aeraki-framework/aeraki.git
+    git clone https://github.com/aeraki-mesh/aeraki.git
     ```
 
  2. Install Istio, Aeraki and demo applications.

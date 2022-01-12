@@ -88,7 +88,7 @@ Redis 的一个常见用途是用作数据高速缓存。通过在应用服务�
 
 下面我们来看一个采用 Thrift 协议的真实案例。Thrift 是 Apache 基金会下一个轻量级、支持多语言的开源 RPC 框架。Envoy 中已经支持 Thrift，但 Istio 中只对 Thrift 提供了有限的支持，并不能实现 Traffic Splitting 等高级流量管理功能。如果我们希望在 Istio 中提供下图中右下角所示 Thrif 服务的 Traffic Splitting 流量控制，我们可以通过 EnvoyFilter 来实现。
 
-(本示例相关源码可以从 https://github.com/aeraki-framework/thrift-envoyfilter-example 下载）
+(本示例相关源码可以从 https://github.com/aeraki-mesh/thrift-envoyfilter-example 下载）
 
 ![](./envoyfilter-thrift.png)
 
@@ -107,7 +107,7 @@ Redis 的一个常见用途是用作数据高速缓存。通过在应用服务�
 
 # Aeraki：在 Istio 中管理任何七层协议
 
-由于难以手动对 EnvoyFilter 进行管理和维护 ，我们创建了[Aeraki](https://github.com/aeraki-framework/aeraki) (发音：[Air-rah-ki]）项目来自动化这个流程。Aeraki 是希腊语中“微风”的意思，我们希望 Aeraki 这股微风能帮助 Istio 在云原生的旅程中航行得更远。
+由于难以手动对 EnvoyFilter 进行管理和维护 ，我们创建了[Aeraki](https://github.com/aeraki-mesh/aeraki) (发音：[Air-rah-ki]）项目来自动化这个流程。Aeraki 是希腊语中“微风”的意思，我们希望 Aeraki 这股微风能帮助 Istio 在云原生的旅程中航行得更远。
 
 Aeraki 的基本工作原理如下图所示：Aeraki 从 Istio 中拉取服务数据，根据 ServiceEntry 和 Aeraki 流量规则生成 Envoy 配置，并采用 EnvoyFilter 将生成的配置推送到 Istio 中。简而言之，你可以把 Aeraki 看做 Istio 中管理的七层协议的 [Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/)。
 
@@ -131,7 +131,7 @@ Aeraki 的基本工作原理如下图所示：Aeraki 从 Istio 中拉取服务�
 想自己试试 Aeraki 的 Thrift、Dubbo、Redis 服务管理能力？非常简单，只需在一个连接到 K8s 集群的命令行终端上运行下面两行代码，就可以安装一个带有 Aeraki 插件的 Istio 集群以及相应的 Demo 程序，欢迎大家尝试！
 
 ```bash
-git clone https://github.com/aeraki-framework/aeraki.git
+git clone https://github.com/aeraki-mesh/aeraki.git
 aeraki/demo/install-demo.sh
 ```
 
@@ -172,7 +172,7 @@ Istio 可以实现 HTTP 和 gRPC 的故障注入，但这还不够。在一个�
 
 # 小结
 
-Service Mesh 中有大量的七层协议流量，包括 RPC、Database、Cache、Messaging 等类型的七层协议，但 Istio 只提供了 HTTP 和 gRPC 的七层管理能力，对其他七层协议的支持非常有限。Aerkai 开源项目通过非侵入的方式为 Istio 提供了任意七层协议的支持能力，并提供了面向用户的高级配置 CRD，可以很方便地对这些协议的流量进行管理，实现灰度发布等高级流量管理能力。目前 Aeraki 已经支持了 Thrift、Dubbo、Redis、Kafka、Zookeeper，并即将支持更多的协议。Aeraki 的定位是做成一个非侵入式 Istio 功能增强工具集，除了协议扩展之外，还会关注解决在 Istio 使用过程中遇到的其他常见问题，包括效率优化、配置简化、第三方服务发现接入、功能扩展等。如果您希望了解更多关于 Aeraki 的内容，欢迎访问 Github 主页  https://github.com/aeraki-framework 。
+Service Mesh 中有大量的七层协议流量，包括 RPC、Database、Cache、Messaging 等类型的七层协议，但 Istio 只提供了 HTTP 和 gRPC 的七层管理能力，对其他七层协议的支持非常有限。Aerkai 开源项目通过非侵入的方式为 Istio 提供了任意七层协议的支持能力，并提供了面向用户的高级配置 CRD，可以很方便地对这些协议的流量进行管理，实现灰度发布等高级流量管理能力。目前 Aeraki 已经支持了 Thrift、Dubbo、Redis、Kafka、Zookeeper，并即将支持更多的协议。Aeraki 的定位是做成一个非侵入式 Istio 功能增强工具集，除了协议扩展之外，还会关注解决在 Istio 使用过程中遇到的其他常见问题，包括效率优化、配置简化、第三方服务发现接入、功能扩展等。如果您希望了解更多关于 Aeraki 的内容，欢迎访问 Github 主页  https://github.com/aeraki-mesh 。
 
 __招聘信息__：腾讯云 Service Mesh 团队正在火热招聘中，Base 成都、北京、深圳或者西安，要求候选者熟悉 Kubernetes/Istio/Envoy。欢迎大家发送简历到 huabingzhao@tencent.com 或者微信联系 zhao_huabing。
 
@@ -180,7 +180,7 @@ __招聘信息__：腾讯云 Service Mesh 团队正在火热招聘中，Base 成
 
 * [IstioCon talk “How to Manage Any Layer-7 Traffic in an Istio Service Mesh?” 视频回放](https://www.bilibili.com/video/BV1XN41197Sq)
 * [IstioCon talk “How to Manage Any Layer-7 Traffic in an Istio Service Mesh? 讲稿下载](https://zhaohuabing.com/slides/how-to-manage-any-layer-7-traffic-in-istio.pdf)
-* [Aeraki Github 主页](https://github.com/aeraki-framework)
+* [Aeraki Github 主页](https://github.com/aeraki-mesh)
 * [Aeraki 在线 Demo](http://aeraki.zhaohuabing.com:3000/d/pgz7wp-Gz/aeraki-demo?orgId=1&refresh=10s&kiosk)
 * [IstioCon 2021 Playlist](https://events.istio.io/istiocon-2021/sessions/)
 

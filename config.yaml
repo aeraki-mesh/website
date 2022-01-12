@@ -67,11 +67,11 @@ params:
     distributed system
 
     # Repository configuration (URLs for in-page links to opening issues and suggesting changes)
-  github_repo: https://github.com/aeraki-framework/website
+  github_repo: https://github.com/aeraki-mesh/website
   github_branch: main
 
   # An optional link to a related project repo. For example, the sibling repository where your product code lives.
-  github_project_repo: https://github.com/aeraki-framework
+  github_project_repo: https://github.com/aeraki-mesh
 
   # Enable Algolia DocSearch
   algolia_docsearch: false
@@ -113,11 +113,11 @@ params:
       # The responses that the user sees after clicking "yes" (the page was helpful) or "no" (the page was not helpful).
       'yes': >-
         Glad to hear it! Please <a
-        href="https://github.com/aeraki-framework/website/issues/new">tell us how we
+        href="https://github.com/aeraki-mesh/website/issues/new">tell us how we
         can improve</a>.
       'no': >-
         Sorry to hear that. Please <a
-        href="https://github.com/aeraki-framework/website/issues/new">tell us how we
+        href="https://github.com/aeraki-mesh/website/issues/new">tell us how we
         can improve</a>.
 
     # Adds a reading time to the top of each doc.
@@ -142,10 +142,10 @@ params:
     # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
     developer:
       - name: Aeraki on GitHub
-        url: https://github.com/aeraki-framework
+        url: https://github.com/aeraki-mesh
         icon: fab fa-github-square
       - name: Aeraki.net on GitHub
-        url: https://github.com/aeraki-framework/website
+        url: https://github.com/aeraki-mesh/website
         icon: fab fa-github
   # [params.logos]
 

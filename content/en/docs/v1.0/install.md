@@ -50,7 +50,7 @@ data:
 ## Install Aeraki
 
 ```bash
-git clone https://github.com/aeraki-framework/aeraki.git
+git clone https://github.com/aeraki-mesh/aeraki.git
 cd aeraki
 export AERAKI_VERSION=1.0.0
 make install
@@ -61,5 +61,5 @@ make install
 You can choose to install aerakictl tool for debug purpose.
 
 ```bash
-git clone https://github.com/aeraki-framework/aerakictl.git ~/aerakictl;source ~/aerakictl/aerakictl.sh
+git clone https://github.com/aeraki-mesh/aerakictl.git ~/aerakictl;source ~/aerakictl/aerakictl.sh
 ```

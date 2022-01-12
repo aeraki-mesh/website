@@ -9,7 +9,7 @@ description: Get Aeraki up and running in less than 5 minutes!
  1. 从 github 下载 Aeraki。
 
     ```bash
-    git clone https://github.com/aeraki-framework/aeraki.git
+    git clone https://github.com/aeraki-mesh/aeraki.git
     ```
 
  2. 安装 Aeraki， Istio 和 demo 应用。
@@ -24,7 +24,7 @@ description: Get Aeraki up and running in less than 5 minutes!
     aerakictl 脚本工具封装了一些常用的 debug 命令，我们将在后续的教程中使用这些命令来查看应用程序和代理的信息。
 
     ```bash
-    git clone https://github.com/aeraki-framework/aerakictl.git ~/aerakictl;source ~/aerakictl/aerakictl.sh
+    git clone https://github.com/aeraki-mesh/aerakictl.git ~/aerakictl;source ~/aerakictl/aerakictl.sh
     ```
 
  4. 在浏览器中打开下面的网页，来查看 Aeraki 部署的应用程序和上报的请求指标数据。
