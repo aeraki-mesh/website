@@ -21,6 +21,8 @@ Aeraki 的限流规则设计直观而灵活，既支持对一个服务的所有�
 
 ## 对服务的所有入向请求进行限流
 
+下面的规则可以对 thrift-sample-server.meta-thrift.svc.cluster.local 服务的所有入向请求进行限流，限流设置为 2次请求/每分钟。
+
 ```bash
 kubectl apply -f- <<EOF
 apiVersion: metaprotocol.aeraki.io/v1alpha1
