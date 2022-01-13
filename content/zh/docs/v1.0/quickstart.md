@@ -39,6 +39,6 @@ description: Get Aeraki up and running in less than 5 minutes!
 点击下面的链接，了解更多 Aeraki 的相关功能：
 
 - [流量路由](/zh/docs/v1.0/tutorials/routing/) 
-- [本地限流](/zh/docs/v1.0/local-rate-limit/)
-- [全局限流](/zh/docs/v1.0/global-rate-limit//)
+- [本地限流](/zh/docs/v1.0/tutorials/local-rate-limit/)
+- [全局限流](/zh/docs/v1.0/tutorials/global-rate-limit//)
 - [开发一个自定义协议](/zh/docs/v1.0/tutorials/implement-a-custom-protocol/)

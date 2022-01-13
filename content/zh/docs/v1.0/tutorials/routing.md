@@ -38,7 +38,7 @@ Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 
 MetaProtocol 支持了非常灵活的路由匹配条件，任何可以从协议数据包中解析出来的属性都能用于路由匹配条件。
 
-备注：Aeraki 会按照服务的 VIP 建立 Listener，每个服务独享 Listener，避免了 HTTP 协议的同端口多服务带来的路由表膨胀问题，路由表中只包含本服务相关的路由信息，极大地提高了路由查询效率。
+> 备注：Aeraki 会按照服务的 VIP 建立 Listener，每个服务独享 Listener，避免了 HTTP 协议的同端口多服务带来的路由表膨胀问题，路由表中只包含本服务相关的路由信息，极大地提高了路由查询效率。
 
 创建一条 MetaRouter 路由规则，将请求路由到 v1：
 
@@ -112,7 +112,7 @@ EOF
 使用 aerakictl 命令来查看客户端的应用日志，可以看到客户端的请求按照 MetaRouter 中设置的指定比例发送到了 v1 和 v2：
 
 ```bash
-➜  ~ aeraki git:(work) ✗ aerakictl_app_log client meta-thrift -f --tail 10
+➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
 Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
 Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
 Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
@@ -127,7 +127,7 @@ Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 
 ## 理解原理
 
-Aeraki 向 Sidecar Proxy 下发的配置中为服务对应的 Listener 设置了 MetaProtocol Proxy，配置中指定 Aeraki 为 RDS 服务器。
+在向 Sidecar Proxy 下发的配置中， Aeraki 在服务对应的 Outbound Listener 的 FilterChain 中设置了 MetaProtocol Proxy，并在 MetaProtocol Proxy 配置中指定 Aeraki 为 RDS 服务器。
 
 Aeraki 会将 MetaRouter 中配置的路由规则翻译为 MetaProtocol Proxy 的路由规则，通过 Aeraki 内置的 RDS 服务器下发给 MetaProtocol Proxy。
 
