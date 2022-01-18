@@ -8,7 +8,7 @@ weight: 200
 
 如果你还没有安装示例程序，请参照 [快速开始](/zh/docs/v1.0/quickstart/) 安装 Aeraki，Istio 及示例程序。
 
-安装完成后，可以看到集群中增加了下面两个 NS，两个 NS 中分别安装了基于 MetaProtocol 实现的 Dubbo 和 Thrift 协议的示例程序。
+安装完成后，可以看到集群中增加了下面两个 NS，这两个 NS 中分别安装了基于 MetaProtocol 实现的 Dubbo 和 Thrift 协议的示例程序。
 你可以选用任何一个程序进行测试。
 
 ```bash
@@ -19,7 +19,7 @@ meta-thrift       Active   16m
 
 ## 请求级别的负载均衡
 
-Istio 会使用 TCP proxy 来代理非 HTTP 协议的客户端请求，同一个客户端 TCP 连接上发出的所有请求都会被发送到一个服务器端。这导致了一个问题：当客户端使用长连接时，多个服务器实例收到的请求不够均衡，当服务器压力过大时，即使及时扩容也不能将已有服务器的压力分担出去。
+Istio 会使用 TCP proxy 来代理非 HTTP 协议的客户端请求，同一个客户端 TCP 连接上发出的所有请求都会被发送到一个服务器实例。这导致了一个问题：当客户端使用长连接时，多个服务器实例收到的请求不够均衡，当服务端压力过大时，即使及时扩容也不能将已有服务端的压力分担出去。
 
 Aeraki 支持对基于 MetaProtocol 开发的任何协议进行七层（请求级别）负载均衡，因此在不进行任何配置的情况下，客户端的代理会将请求均匀发送到两个不同版本的服务器端。
 下面我们用 aerakictl 命令来查看客户端的应用日志，可以看到同一个客户端连接上的多个请求被依次发送到了 v1 和 v2 两个服务器端。
@@ -34,11 +34,11 @@ Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
 Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 ```
 
-## 按任意属性将请求路由到某个指定版本的服务器
+## 按任意属性将请求路由到某个指定版本的服务
 
 MetaProtocol 支持了非常灵活的路由匹配条件，任何可以从协议数据包中解析出来的属性都能用于路由匹配条件。
 
-备注：Aeraki 会按照服务的 VIP 建立 Listener，每个服务独享 Listener，避免了 HTTP 协议的同端口多服务带来的路由表膨胀问题，路由表中只包含本服务相关的路由信息，极大地提高了路由查询效率。
+> 备注：Aeraki 会按照服务的 VIP 建立 Listener，每个服务独享 Listener，避免了 HTTP 协议的同端口多服务带来的路由表膨胀问题，路由表中只包含本服务相关的路由信息，极大地提高了路由查询效率。
 
 创建一条 MetaRouter 路由规则，将请求路由到 v1：
 
@@ -79,7 +79,7 @@ Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 
 ## 流量拆分
 
-使用 MetaRouter 路由规则将客户端的流量按照指定比例发送到不同版本的服务器端。
+使用 MetaRouter 路由规则将客户端的流量按照指定比例发送到不同版本的服务。
 
 ```bash
 kubectl apply -f- <<EOF
@@ -112,7 +112,7 @@ EOF
 使用 aerakictl 命令来查看客户端的应用日志，可以看到客户端的请求按照 MetaRouter 中设置的指定比例发送到了 v1 和 v2：
 
 ```bash
-➜  ~ aeraki git:(work) ✗ aerakictl_app_log client meta-thrift -f --tail 10
+➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
 Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
 Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
 Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
@@ -127,7 +127,7 @@ Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 
 ## 理解原理
 
-Aeraki 向 Sidecar Proxy 下发的配置中为服务对应的 Listener 设置了 MetaProtocol Proxy，配置中指定 Aeraki 为 RDS 服务器。
+在向 Sidecar Proxy 下发的配置中， Aeraki 在服务对应的 Outbound Listener 的 FilterChain 中设置了 MetaProtocol Proxy，并在 MetaProtocol Proxy 配置中指定 Aeraki 为 RDS 服务器。
 
 Aeraki 会将 MetaRouter 中配置的路由规则翻译为 MetaProtocol Proxy 的路由规则，通过 Aeraki 内置的 RDS 服务器下发给 MetaProtocol Proxy。
 
@@ -178,7 +178,7 @@ aerakictl_sidecar_config client meta-thrift |fx
 }
 ```
 
-在导出的文件中还可以查看到目前生效的 RDS 路由信息，如下所示：
+在导出的文件中还可以查看到目前 Proxy 中生效的 RDS 路由信息，如下所示：
 
 ```yaml
 {
