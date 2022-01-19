@@ -1,4 +1,4 @@
 ---
-title: 教程
+title: Tutorials
 weight: 1110
 ---
