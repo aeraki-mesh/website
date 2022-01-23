@@ -1,5 +1,5 @@
 ---
-title: 如何设置全局限流
+title: How to configure global rate limit
 description: 
 weight: 200
 ---

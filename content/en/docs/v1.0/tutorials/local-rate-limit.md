@@ -1,5 +1,5 @@
 ---
-title: 如何设置本地限流
+title: How to configure local rate limit
 description: 
 weight: 200
 ---

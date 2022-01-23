@@ -1,5 +1,5 @@
 ---
-title: 如何设置路由规则
+title: How to configure traffic routing
 description: 
 weight: 200
 ---
