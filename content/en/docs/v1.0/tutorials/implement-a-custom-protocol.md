@@ -57,6 +57,31 @@ public:
 
 需要在 WORKSPACE 中配置 metaProtocol 的 git commit，envoy 和 Istio-Proxy 的依赖参考 metaProtocol 该 commit 中的 WORKSPACE 中的配置。版本依赖关系参见 [Aeraki 和 MetaProtocol 以及 Istio 的版本兼容性](/zh/docs/v1.0/install/#aeraki-%E5%92%8C-metaprotocol-%E4%BB%A5%E5%8F%8A-istio-%E7%9A%84%E7%89%88%E6%9C%AC%E5%85%BC%E5%AE%B9%E6%80%A7)。
 
+```Starlark
+
+# 从 meta_protocol_proxy 的代码中获取 envoy 的依赖版本信息
+ENVOY_SHA = "98c1c9e9a40804b93b074badad1cdf284b47d58b"
+ENVOY_SHA256 = "4365a4c09b9a8b3c4ae34d75991fcd046f3e19d53d95dfd5c89209c30be94fe6"
+......
+
+# 从 meta_protocol_proxy 的代码中获取 istio_proxy 的依赖版本信息
+http_archive(
+    name = "io_istio_proxy",
+    strip_prefix = "proxy-1.10.0",
+    sha256 = "19d13bc4859dc8422b91fc28b0d8d12a34848393583eedfb08af971c658e7ffb",
+    url = "https://github.com/istio/proxy/archive/refs/tags/1.10.0.tar.gz",   
+)
+
+...... 
+
+# 设置 metaProtocol 的 git commit
+git_repository(
+  name = "meta_protocol_proxy",
+  remote = "https://github.com/aeraki-mesh/meta-protocol-proxy.git",
+  commit = "5ae1d11",  
+)
+```
+
 ## 编译
 
 建议使用 Ubuntu 18.04 作为编译环境。
