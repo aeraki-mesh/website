@@ -71,7 +71,6 @@ http_archive(
     sha256 = "19d13bc4859dc8422b91fc28b0d8d12a34848393583eedfb08af971c658e7ffb",
     url = "https://github.com/istio/proxy/archive/refs/tags/1.10.0.tar.gz",   
 )
-
 ...... 
 
 # 设置 metaProtocol 的 git commit
