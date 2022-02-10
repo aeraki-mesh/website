@@ -63,8 +63,7 @@ markup:
 params:
   copyright: Aeraki Authors
   description: >-
-    A distributed, reliable key-value store for the most critical data of a
-    distributed system
+    Manage any layer-7 protocols in a service mesh
 
     # Repository configuration (URLs for in-page links to opening issues and suggesting changes)
   github_repo: https://github.com/aeraki-mesh/website
