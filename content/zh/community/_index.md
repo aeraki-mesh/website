@@ -70,6 +70,12 @@ meetings, see [Aeraki community meeting][meeting-doc].
 
 {{% cards "community_resources" %}}
 
+## Code of Conduct
+
+Aeraki community follows the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/bec34a2614c980f8cfe38b18105e0baa820936cc/code-of-conduct.md).
+
+Please report instances of abusive, harassing, or otherwise unacceptable behavior by contacting one or more of the [Aeraki Project Owners](https://github.com/orgs/aeraki-mesh/teams/owners/members).
+
 ## Contributing
 
 Your contributions to Aeraki code and documentation are welcome! If you find a
