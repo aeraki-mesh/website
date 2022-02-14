@@ -10,6 +10,9 @@
 - name: Xiaohongshu
   link: https://www.xiaohongshu.com/
   image: /img/xiaohongshu.png
+- name: yonghui
+  link: https://www.yonghui.com.cn
+  image: /img/yonghui.png
 - name: Hundsun
   link: https://www.hundsun.com/
   image: https://www.hundsun.com/assets/img/logo.591f4472.gif
