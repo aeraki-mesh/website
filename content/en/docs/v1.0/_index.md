@@ -9,6 +9,3 @@ linkTitle: *name
 simple_list: true
 weight: -350 # Weight for doc version vX.Y should be -XY0
 ---
-
-These docs cover everything from setting up and running an etcd cluster to using
-etcd in applications.
