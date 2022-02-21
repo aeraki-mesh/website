@@ -34,14 +34,14 @@ imaging:
 
 languages:
   en:
-    title: Aeraki
+    title: Aeraki Mesh
     description: >-
       Manage any layer-7 protocols in a service mesh
     languageName: English
     contentDir: content/en
     weight: 1
   zh:
-    title: Aeraki
+    title: Aeraki Mesh
     description: >-
       在服务网格中管理任何七层协议
     languageName: 中文
