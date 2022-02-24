@@ -63,3 +63,7 @@ You can choose to install aerakictl tool for debug purpose.
 ```bash
 git clone https://github.com/aeraki-mesh/aerakictl.git ~/aerakictl;source ~/aerakictl/aerakictl.sh
 ```
+
+## Use Aeraki in TCM(Tencent Cloud Mesh)
+
+If you want to use Aeraki with Tcenct Cloud Mesh [TCM](https://cloud.tencent.com/product/tcm), please contact [TCM's sales team or business advisors](https://intl.cloud.tencent.com/contact-us). 

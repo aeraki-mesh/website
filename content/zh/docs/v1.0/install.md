@@ -70,3 +70,7 @@ Aeraki 内主要包括两类组件：
 * MetaProtocol RDS 服务器：根据 MetaRouter CRD 资源生成 MetaProtocol 动态路由，并通过 MetaRDS 下发给数据面的 Proxy，Aeraki 支持多实例水平扩展，以对 RDS 服务器的压力进行负载均衡。
 
 对于生产环境，请根据集群规模和数据面边车数量调整对应的 Aeraki 实例，可以通过 K8s HPA 进行动态扩展。
+
+## 在 TCM 中使用 Aeraki
+
+腾讯云服务网格 [TCM](https://cloud.tencent.com/product/tcm) 支持集成 Aeraki。如果希望在 TCM 使用 Aeraki 的协议扩展能力，请联系[腾讯云售前架构师](https://cloud.tencent.com/act/event/connect-service?from=intro_tcm#/)进行咨询。
