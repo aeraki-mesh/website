@@ -34,10 +34,10 @@ Aeraki Mesh 可以帮助你在服务网格中管理任何七层协议。目前�
 
 Aeraki Mesh 是一个厂商中立的开源社区，目前社区正在大力发展中，欢迎大家加入！
 
-安装试用：https://www.aeraki.net/zh/docs/v1.0/quickstart/
+安装试用： https://www.aeraki.net/zh/docs/v1.0/quickstart/
 
-加入社区会议：https://www.aeraki.net/zh/community/#community-meetings
+加入社区会议： https://www.aeraki.net/zh/community/#community-meetings
 
-Star 一下: https://github.com/aeraki-mesh/aeraki
+Star 一下： https://github.com/aeraki-mesh/aeraki
 
 
