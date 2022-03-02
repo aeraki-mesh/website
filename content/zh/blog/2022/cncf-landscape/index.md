@@ -24,7 +24,7 @@ Aeraki Mesh 是 Service Mesh 领域的一个开源项目，解决目前的服务
 Aeraki Mesh 可以帮助你在服务网格中管理任何七层协议。目前已经支持了 Dubbo、Thrit、Redis、Kafka、ZooKeeper 等开源协议。你还可以使用 Aeraki Mesh 提供的 MetaProtocol 协议扩展框架来管理私有协议的七层流量。
 
 目前 Aeraki 已经在央视频、腾讯音乐、王者破晓等多个大型项目中得到了应用，并经过了 2022 冬奥会线上大规模流量的实际检验。Aeraki 的主要特点：
-* 和 Istio 无缝集成，是 [Istio Ecosystem](https://istio.io/latest/about/ecosystem/) 集成推荐项目。
+* 和 Istio 无缝集成，是 [Istio Ecosystem](https://istio.io/latest/about/ecosystem/) 集成推荐项目。您可以采用 Istio + Aeraki 来构建一个可以同时管理 HTTP 和其他七层协议​的全栈服务网格。​
 * 支持在 Istio 中管理 Dubbo、Thrift、Redis 等开源协议的流量。
 * 支持在 Istio 中管理私有协议的流量，只需数百行代码，对 Istio 无任何改动。
 * 支持请求级负载均衡，支持任意匹配条件的动态路由，全局和本地限流，流量镜像等流量管理能力。
