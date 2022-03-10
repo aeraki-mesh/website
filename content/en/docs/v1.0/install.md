@@ -1,6 +1,6 @@
 ---
 title: Install
-weight: 1150
+weight: 1000
 description: Instructions for installing Aeraki.
 minGoVers: 1.16
 ---
