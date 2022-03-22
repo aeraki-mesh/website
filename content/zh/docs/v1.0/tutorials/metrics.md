@@ -1,7 +1,7 @@
 ---
 title: 如何查看度量指标
 description: 
-weight: 200
+weight: 50
 ---
 
 ## 安装示例程序

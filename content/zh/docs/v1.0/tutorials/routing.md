@@ -1,7 +1,7 @@
 ---
 title: 如何设置路由规则
 description: 
-weight: 200
+weight: 10
 ---
 
 ## 安装示例程序

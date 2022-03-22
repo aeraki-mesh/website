@@ -1,7 +1,7 @@
 ---
 title: 如何设置全局限流
 description: 
-weight: 200
+weight: 30
 ---
 
 ## 安装示例程序

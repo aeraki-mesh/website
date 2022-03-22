@@ -1,7 +1,7 @@
 ---
 title: 如何修改消息头
 description: 
-weight: 200
+weight: 60
 ---
 
 ## 安装示例程序

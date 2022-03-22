@@ -1,12 +1,12 @@
 ---
 title: How to configure traffic routing
 description: 
-weight: 200
+weight: 10
 ---
 
 ## 安装示例程序
 
-如果你还没有安装示例程序，请参照 [快速开始](/zh/docs/v1.0/quickstart/) 安装 Aeraki，Istio 及示例程序。
+如果你还没有安装示例程序，请参照 [快速开始](/docs/v1.0/quickstart/) 安装 Aeraki，Istio 及示例程序。
 
 安装完成后，可以看到集群中增加了下面两个 NS，这两个 NS 中分别安装了基于 MetaProtocol 实现的 Dubbo 和 Thrift 协议的示例程序。
 你可以选用任何一个程序进行测试。

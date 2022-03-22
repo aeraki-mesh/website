@@ -1,7 +1,7 @@
 ---
 title: 如何设置本地限流
 description: 
-weight: 200
+weight: 20
 ---
 
 ## 安装示例程序
