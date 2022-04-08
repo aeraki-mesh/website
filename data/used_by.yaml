@@ -1,7 +1,7 @@
 # cSpell:ignore Kubernetes
-- name: QQ Music
-  link: https://y.qq.com
-  image: https://y.qq.com/mediastyle/yqq/img/logo.png?max_age=2592000
+- name: Tencent Music
+  link: https://www.tencentmusic.com/
+  image: /img/tencentmusic.png
 - name: Yangshipin
   link: https://yangshipin.cn/
   image: https://s.yangshipin.cn/CCTVVideo/CCTVVideoAssets/v10/images/www/logo_head_color.png
