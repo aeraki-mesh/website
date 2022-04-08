@@ -13,6 +13,9 @@
 - name: yonghui
   link: https://www.yonghui.com.cn
   image: /img/yonghui.png
-- name: Hundsun
-  link: https://www.hundsun.com/
-  image: https://www.hundsun.com/assets/img/logo.591f4472.gif
+- name: zcy
+  link: https://login.zcygov.cn/
+  image: /img/zcy.png
+#- name: Hundsun
+#  link: https://www.hundsun.com/
+#  image: https://www.hundsun.com/assets/img/logo.591f4472.gif
