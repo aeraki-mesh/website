@@ -25,13 +25,13 @@ Aeraki 支持对基于 MetaProtocol 开发的任何协议进行七层（请求�
 下面我们用 aerakictl 命令来查看客户端的应用日志，可以看到同一个客户端连接上的多个请求被依次发送到了 v1 和 v2 两个服务器端。
 
 ```bash
-➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
-Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
-Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
-Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
-Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
-Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
-Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
+➜  ~ aerakictl_app_log consumer meta-dubbo -f --tail 10
+Hello Aeraki, response from dubbo-sample-provider-v2-7546478cbf-l2l74/172.16.0.37
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v2-7546478cbf-l2l74/172.16.0.37
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v2-7546478cbf-l2l74/172.16.0.37
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
 ```
 
 ## 按任意属性将请求路由到某个指定版本的服务
@@ -47,20 +47,24 @@ kubectl apply -f- <<EOF
 apiVersion: metaprotocol.aeraki.io/v1alpha1
 kind: MetaRouter
 metadata:
-  name: test-metaprotocol-thrift-route
-  namespace: meta-thrift
+  name: test-metaprotocol-dubbo-route
+  namespace: meta-dubbo
 spec:
   hosts:
-    - thrift-sample-server.meta-thrift.svc.cluster.local
+    - org.apache.dubbo.samples.basic.api.demoservice
   routes:
     - name: v1
       match:
         attributes:
+          interface:
+            exact: org.apache.dubbo.samples.basic.api.DemoService
           method:
             exact: sayHello
+          foo:
+            exact: bar
       route:
         - destination:
-            host: thrift-sample-server.meta-thrift.svc.cluster.local
+            host: org.apache.dubbo.samples.basic.api.demoservice
             subset: v1
 EOF
 ```
@@ -68,13 +72,13 @@ EOF
 使用 aerakictl 命令来查看客户端的应用日志，可以看到客户端的所有请求都被路由到了 v1 版本：
 
 ```bash
-➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
-Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
-Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
-Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
-Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
-Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
-Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
+➜  ~ aerakictl_app_log consumer meta-dubbo -f --tail 10
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
 ```
 
 ## 流量拆分
@@ -86,24 +90,28 @@ kubectl apply -f- <<EOF
 apiVersion: metaprotocol.aeraki.io/v1alpha1
 kind: MetaRouter
 metadata:
-  name: test-metaprotocol-thrift-route
-  namespace: meta-thrift
+  name: test-metaprotocol-dubbo-route
+  namespace: meta-dubbo
 spec:
   hosts:
-    - thrift-sample-server.meta-thrift.svc.cluster.local
+    - org.apache.dubbo.samples.basic.api.demoservice
   routes:
     - name: traffic-split
       match:
         attributes:
+          interface:
+            exact: org.apache.dubbo.samples.basic.api.DemoService
           method:
             exact: sayHello
+          foo:
+            exact: bar
       route:
         - destination:
-            host: thrift-sample-server.meta-thrift.svc.cluster.local
+            host: org.apache.dubbo.samples.basic.api.demoservice
             subset: v1
           weight: 20
         - destination:
-            host: thrift-sample-server.meta-thrift.svc.cluster.local
+            host: org.apache.dubbo.samples.basic.api.demoservice
             subset: v2
           weight: 80
 EOF
@@ -112,17 +120,17 @@ EOF
 使用 aerakictl 命令来查看客户端的应用日志，可以看到客户端的请求按照 MetaRouter 中设置的指定比例发送到了 v1 和 v2：
 
 ```bash
-➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
-Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
-Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
-Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
-Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
-Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
-Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
-Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
-Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
-Hello Aeraki, response from thrift-sample-server-v1-6d5bcc885-wglpc/172.17.0.93
-Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
+➜  ~ aerakictl_app_log consumer meta-dubbo -f --tail 10
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
+Hello Aeraki, response from dubbo-sample-provider-v2-7546478cbf-l2l74/172.16.0.37
+Hello Aeraki, response from dubbo-sample-provider-v2-7546478cbf-l2l74/172.16.0.37
+Hello Aeraki, response from dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl/172.16.0.89
 ```
 
 ## 理解原理
@@ -134,47 +142,47 @@ Aeraki 会将 MetaRouter 中配置的路由规则翻译为 MetaProtocol Proxy �
 可以通过下面的命令查看 sidecar proxy 的配置：
 
 ``` bash
-aerakictl_sidecar_config client meta-thrift |fx
+aerakictl_sidecar_config consumer meta-dubbo |fx
 ```
 
-其中 Thrift 服务的 Outbound Listener 中的 MetaProtocol Proxy 配置如下所示：
+其中 Dubbo 服务的 Outbound Listener 中的 MetaProtocol Proxy 配置如下所示：
 
 ```yaml
 {
- "name": "envoy.filters.network.meta_protocol_proxy",
- "typed_config": {
-  "@type": "type.googleapis.com/udpa.type.v1.TypedStruct",
-  "type_url": "type.googleapis.com/aeraki.meta_protocol_proxy.v1alpha.MetaProtocolProxy",
-  "value": {
-   "stat_prefix": "outbound|9090||thrift-sample-server.meta-thrift.svc.cluster.local",
-   "application_protocol": "thrift",
-   "rds": {
-    "config_source": {
-     "api_config_source": {
-      "api_type": "GRPC",
-      "grpc_services": [
-       {
-        "envoy_grpc": {
-         "cluster_name": "aeraki-xds"
+  "name":"envoy.filters.network.meta_protocol_proxy",
+  "typed_config":{
+    "@type":"type.googleapis.com/udpa.type.v1.TypedStruct",
+    "type_url":"type.googleapis.com/aeraki.meta_protocol_proxy.v1alpha.MetaProtocolProxy",
+    "value":{
+      "stat_prefix":"outbound|20880||org.apache.dubbo.samples.basic.api.complexservice-product-2-0-0",
+      "application_protocol":"dubbo",
+      "rds":{
+        "config_source":{
+          "api_config_source":{
+            "api_type":"GRPC",
+            "grpc_services":[
+              {
+                "envoy_grpc":{
+                  "cluster_name":"aeraki-xds"
+                }
+              }
+            ],
+            "transport_api_version":"V3"
+          },
+          "resource_api_version":"V3"
+        },
+        "route_config_name":"org.apache.dubbo.samples.basic.api.complexservice-product-2-0-0_20880"
+      },
+      "codec":{
+        "name":"aeraki.meta_protocol.codec.dubbo"
+      },
+      "meta_protocol_filters":[
+        {
+          "name":"aeraki.meta_protocol.filters.router"
         }
-       }
-      ],
-      "transport_api_version": "V3"
-     },
-     "resource_api_version": "V3"
-    },
-    "route_config_name": "thrift-sample-server.meta-thrift.svc.cluster.local_9090"
-   },
-   "codec": {
-    "name": "aeraki.meta_protocol.codec.thrift"
-   },
-   "meta_protocol_filters": [
-    {
-     "name": "aeraki.meta_protocol.filters.router"
+      ]
     }
-   ]
   }
- }
 }
 ```
 
@@ -182,44 +190,52 @@ aerakictl_sidecar_config client meta-thrift |fx
 
 ```yaml
 {
-@type": "type.googleapis.com/aeraki.meta_protocol_proxy.admin.v1alpha.RoutesConfigDump",
-dynamic_route_configs": [
-{
- "version_info": "1641896797",
- "route_config": {
-  "@type": "type.googleapis.com/aeraki.meta_protocol_proxy.config.route.v1alpha.RouteConfiguration",
-  "name": "thrift-sample-server.meta-thrift.svc.cluster.local_9090",
-  "routes": [
-   {
-    "name": "traffic-split",
-    "match": {
-     "metadata": [
-      {
-       "name": "method",
-       "exact_match": "sayHello"
-      }
-     ]
-    },
-    "route": {
-     "weighted_clusters": {
-      "clusters": [
-       {
-        "name": "outbound|9090|v1|thrift-sample-server.meta-thrift.svc.cluster.local",
-        "weight": 20
-       },
-       {
-        "name": "outbound|9090|v2|thrift-sample-server.meta-thrift.svc.cluster.local",
-        "weight": 80
-       }
-      ],
-      "total_weight": 100
-     }
+  "@type":"type.googleapis.com/aeraki.meta_protocol_proxy.admin.v1alpha.RoutesConfigDump",
+  "dynamic_route_configs":[
+    {
+      "version_info":"1650265656",
+      "route_config":{
+        "@type":"type.googleapis.com/aeraki.meta_protocol_proxy.config.route.v1alpha.RouteConfiguration",
+        "name":"org.apache.dubbo.samples.basic.api.demoservice_20880",
+        "routes":[
+          {
+            "name":"traffic-split",
+            "match":{
+              "metadata":[
+                {
+                  "name":"interface",
+                  "exact_match":"org.apache.dubbo.samples.basic.api.DemoService"
+                },
+                {
+                  "name":"method",
+                  "exact_match":"sayHello"
+                },
+                {
+                  "name":"foo",
+                  "exact_match":"bar"
+                }
+              ]
+            },
+            "route":{
+              "weighted_clusters":{
+                "clusters":[
+                  {
+                    "name":"outbound|20880|v1|org.apache.dubbo.samples.basic.api.demoservice",
+                    "weight":20
+                  },
+                  {
+                    "name":"outbound|20880|v2|org.apache.dubbo.samples.basic.api.demoservice",
+                    "weight":80
+                  }
+                ],
+                "total_weight":100
+              }
+            }
+          }
+        ]
+      },
+      "last_updated":"2022-04-18T07:07:36.165Z"
     }
-   }
-  ]
- },
- "last_updated": "2022-01-11T10:26:37.357Z"
-}
 ```
 
 

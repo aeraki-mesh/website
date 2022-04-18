@@ -169,23 +169,45 @@ spec:
 
 首先参照 [快速开始](/zh/docs/v1.0/quickstart/) 即可安装 Aeraki 和 Istio。
 
-快速开始中安装的 Dubbo 示例程序没有采用 Dubbo 注册表，我们先将其删除。
+快速开始中安装的 Dubbo 示例程序没有采用 Dubbo 注册表，我们先将其卸载。
 
 ```bash
-kubectl delete ns meta-dubbo
+./demo/metaprotocol-dubbo/uninstall.sh
 ```
 
-然后安装 Dubbo2Istio 中的 Demo 程序：
+然后安装 Dubbo2Istio 中使用了 Dubbo 注册表的 Demo 程序：
 
 ```bash
 git clone https://github.com/aeraki-mesh/dubbo2istio.git
 cd dubbo2istio
-kubectl create ns dubbo
-kubectl label namespace dubbo istio-injection=enabled --overwrite
-kubectl apply -f demo/k8s/aeraki-bootstrap-config.yaml -n dubbo
-kubectl apply -f demo/k8s/zk -n dubbo
+kubectl create ns meta-dubbo
+kubectl label namespace meta-dubbo istio-injection=enabled --overwrite
+kubectl apply -f demo/k8s/aeraki-bootstrap-config.yaml -n meta-dubbo
+kubectl apply -f demo/k8s/zk -n meta-dubbo
+kubectl apply -f demo/traffic-rules/destinationrule.yaml -n meta-dubbo
 ```
 上面的脚本安装的是 ZooKeeper 注册表，你也可以选择安装 nacos 或者 etcd 注册表。Dubbo Demo 应用程序源码可以从 https://github.com/aeraki-mesh/dubbo-envoyfilter-example 下载。
+
+稍等片刻后验证部署的 dubbo Demo 应用。
+
+```bash
+kubectl get pod -n meta-dubbo
+NAME                                        READY   STATUS    RESTARTS   AGE
+dubbo-sample-consumer-5cf9f6f878-qxwwp      2/2     Running   0          97s
+dubbo-sample-provider-v1-6b7cc9b6f8-j9dvl   2/2     Running   0          97s
+dubbo-sample-provider-v2-7546478cbf-l2l74   2/2     Running   0          97s
+dubbo2istio-5c4cf7f847-d7kf2                1/1     Running   0          97s
+zookeeper-77c844c5b9-7p47v                  1/1     Running   0          96s
+```
+
+可以看到 dubbo namespace中有下面的 pod：
+
+* dubbo-sample-consumer: Dubbo 客户端应用
+* dubbo-sample-provider-v1： Dubbo 服务器端应用（v1版本）
+* dubbo-sample-provider-v2： Dubbo 服务器端应用（v2版本）
+* zookeeper: Dubbo ZooKeeper 服务注册表
+* dubbo2istio: 服务同步组件，负责将 Dubbo 服务同步到服务网格中
+
 
 安装好 Dubbo Demo 程序后，你可以参考 Aeraki Mesh 的 [教程](https://aeraki.net/zh/docs/v1.0/tutorials/) 体验 Aeraki Mesh 为 Dubbo 应用提供的七层流量治理能力。
 
