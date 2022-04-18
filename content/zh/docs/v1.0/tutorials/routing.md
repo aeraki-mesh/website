@@ -154,7 +154,7 @@ aerakictl_sidecar_config consumer meta-dubbo |fx
     "@type":"type.googleapis.com/udpa.type.v1.TypedStruct",
     "type_url":"type.googleapis.com/aeraki.meta_protocol_proxy.v1alpha.MetaProtocolProxy",
     "value":{
-      "stat_prefix":"outbound|20880||org.apache.dubbo.samples.basic.api.complexservice-product-2-0-0",
+      "stat_prefix":"outbound|20880||org.apache.dubbo.samples.basic.api.demoservice",
       "application_protocol":"dubbo",
       "rds":{
         "config_source":{
@@ -171,7 +171,7 @@ aerakictl_sidecar_config consumer meta-dubbo |fx
           },
           "resource_api_version":"V3"
         },
-        "route_config_name":"org.apache.dubbo.samples.basic.api.complexservice-product-2-0-0_20880"
+        "route_config_name":"org.apache.dubbo.samples.basic.api.demoservice_20880"
       },
       "codec":{
         "name":"aeraki.meta_protocol.codec.dubbo"
