@@ -1,6 +1,12 @@
 # cSpell:ignore Kubernetes
 - name: Tencent Music
   link: https://www.tencentmusic.com/
+  image: /img/partners/tencent-cloud.png
+- name: Tencent Music
+  link: https://www.tencentmusic.com/
+  image: /img/partners/alauda.png
+- name: Tencent Music
+  link: https://www.tencentmusic.com/
   image: /img/tencentmusic.png
 - name: Yangshipin
   link: https://yangshipin.cn/
