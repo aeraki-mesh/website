@@ -7,9 +7,12 @@
   image: /img/partners/baidu.png
 - name: Iqiyi
   image: /img/iqiyi.png
-- name: Tencent Music
+- name: Tencent Cloud
   link: https://intl.cloud.tencent.com/
   image: /img/partners/tencent-cloud-en.png
+- name: Tencent iGame
+  link: https://igame.qq.com/
+  image: /img/partners/igame.png  
 - name: Tencent Music
   link: https://www.tencentmusic.com/
   image: /img/tencentmusic-en.png
