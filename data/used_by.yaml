@@ -1,21 +1,21 @@
 # cSpell:ignore Kubernetes
+- name: Alauda
+  link: https://www.alauda.cn/
+  image: /img/partners/alauda.png
+- name: Iqiyi
+  image: /img/iqiyi.png
 - name: Tencent Music
   link: https://www.tencentmusic.com/
   image: /img/partners/tencent-cloud.png
 - name: Tencent Music
   link: https://www.tencentmusic.com/
-  image: /img/partners/alauda.png
-- name: Tencent Music
-  link: https://www.tencentmusic.com/
   image: /img/tencentmusic.png
-- name: Yangshipin
-  link: https://yangshipin.cn/
-  image: https://s.yangshipin.cn/CCTVVideo/CCTVVideoAssets/v10/images/www/logo_head_color.png
-- name: Iqiyi
-  image: /img/iqiyi.png
 - name: Xiaohongshu
   link: https://www.xiaohongshu.com/
   image: /img/xiaohongshu.png
+- name: Yangshipin
+  link: https://yangshipin.cn/
+  image: https://s.yangshipin.cn/CCTVVideo/CCTVVideoAssets/v10/images/www/logo_head_color.png
 - name: yonghui
   link: https://www.yonghui.com.cn
   image: /img/yonghui.png
