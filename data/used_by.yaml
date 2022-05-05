@@ -2,14 +2,17 @@
 - name: Alauda
   link: https://www.alauda.cn/
   image: /img/partners/alauda.png
+- name: Baidu
+  link: https://www.baidu.com/
+  image: /img/partners/baidu.png
 - name: Iqiyi
   image: /img/iqiyi.png
 - name: Tencent Music
-  link: https://www.tencentmusic.com/
-  image: /img/partners/tencent-cloud.png
+  link: https://intl.cloud.tencent.com/
+  image: /img/partners/tencent-cloud-en.png
 - name: Tencent Music
   link: https://www.tencentmusic.com/
-  image: /img/tencentmusic.png
+  image: /img/tencentmusic-en.png
 - name: Xiaohongshu
   link: https://www.xiaohongshu.com/
   image: /img/xiaohongshu.png
