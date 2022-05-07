@@ -5,6 +5,9 @@
 - name: Baidu
   link: https://www.baidu.com/
   image: /img/partners/baidu.png
+- name: Didi
+  link: https://www.didiglobal.com/
+  image: /img/partners/didi.png
 - name: Iqiyi
   image: /img/iqiyi.png
 - name: Tencent Cloud
