@@ -11,16 +11,16 @@ minGoVers: 1.16
 
 Before installing Aeraki, please check the supported Istio versions and the corresponding Proxy version:
 
-| Aeraki       | MetaProtocol Proxy | Istio      |
-|:------------:|:----------------:|:------------:|
-| 1.0.x        | 1.0.x            | 1.10.x       |
+| Aeraki | MetaProtocol Proxy | Istio  |
+| :----: | :----------------: | :----: |
+| 1.0.x  |       1.0.x        | 1.10.x |
 
 ### Modify Istio configuration
 
 Please modify the istio ConfigMap to add the following content.
 
-* Enable Istio DNS catpure
-* Turn on metrics for Aeraki managed protocols
+- Enable Istio DNS catpure
+- Turn on metrics for Aeraki managed protocols
 
 ```Bash
 kubectl edit cm istio -n istio-system
@@ -66,4 +66,4 @@ git clone https://github.com/aeraki-mesh/aerakictl.git ~/aerakictl;source ~/aera
 
 ## Use Aeraki in TCM(Tencent Cloud Mesh)
 
-If you want to use Aeraki with Tcenct Cloud Mesh [TCM](https://cloud.tencent.com/product/tcm), please contact [TCM's sales team or business advisors](https://intl.cloud.tencent.com/contact-us). 
+If you want to use Aeraki with Tencent Cloud Mesh [TCM](https://cloud.tencent.com/product/tcm), please contact [TCM's sales team or business advisors](https://intl.cloud.tencent.com/contact-us).
