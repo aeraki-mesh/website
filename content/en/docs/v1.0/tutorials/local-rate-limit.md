@@ -4,12 +4,12 @@ description:
 weight: 20
 ---
 
-## Installing the sample program
+## Installing the demo program
 
-If you haven't installed the sample program,Please refer to [Quick Start](./../quickstart.md) to install Aeraki, Istio, and sample programs.
+If you haven't installed the demo program,Please refer to [Quick Start](./../quickstart.md) to install Aeraki, Istio, and demo programs.
 
-After the installation, you can see that the following two NSs have been added to the cluster, and the sample applications for Dubbo and Thrift protocols based on the MetaProtocol implementation are installed in these two NSs.
-You can choose any of the programs to test.
+After the installation, you can see that the following two NSs have been added to the cluster, and the demo applications for Dubbo and Thrift protocols based on the MetaProtocol implementation are installed in these two NSs.
+You can choose either of them to test.
 
 ```bash
 ➜  ~ kubectl get ns|grep meta
@@ -17,9 +17,9 @@ meta-dubbo        Active   16m
 meta-thrift       Active   16m
 ```
 
-Aeraki's flow restriction rules are designed to be intuitive and flexible, supporting both flow restriction for all inbound requests to a service and fine-grained flow restriction control for requests to a server based on different conditions.
+Aeraki's rate limiting rules are designed to be intuitive and flexible, supporting both flow restriction for all inbound requests to a service and fine-grained flow restriction control for requests to a server based on different conditions.
 
-## Restrict the flow of all inbound requests to the service
+## Enforce rate limiting on all inbound requests of a service
 
 The following rule limits all inbound requests to the thrift-sample-server.meta-thrift.svc.cluster.local service to 2 requests / minute.
 
@@ -41,7 +41,7 @@ spec:
 EOF
 ```
 
-> Note: Because local flow limiting is handled separately on each service instance, when the service has multiple instances, the actual flow limiting effect is the number of flow limiting times the number of instances.
+> Note: Because local rate limiting is handled separately on each service instance, when the service has multiple instances, the actual flow limiting effect is the number of flow limiting times the number of instances.
 
 
 Using the aerakictl command to view the client's application log, you can see that the client can only successfully execute 4 requests per minute (with two service instances, each limited to 2 requests per minute).
@@ -64,9 +64,9 @@ org.apache.thrift.TApplicationException: meta protocol local rate limit: request
 
 ## Restrict the flow of inbound requests to services by condition
 
-Aeraki supports multiple flow restriction rules for services based on conditions to meet fine-grained flow restriction requirements. For example, grouping requests by user or pair of interfaces and setting different flow restriction rules for each group. 
+Aeraki supports multiple rate limiting rules for services based on conditions to meet fine-grained flow restriction requirements. For example, grouping requests by user or pair of interfaces and setting different rate limiting rules for each group. 
 
-The matching conditions for grouped flow restriction are the same as those for routing, and any attributes that can be extracted from the request packet can be used for the matching conditions of the flow restriction rule.
+The matching conditions for grouped flow restriction are the same as those for routing, and any attributes that can be extracted from the request packet can be used for the matching conditions of the rate limiting rule.
 
 For example, the following rules set different flow restrictions for the sayHello and ping interfaces.
 
@@ -101,9 +101,9 @@ spec:
 
 ## Set rules for restriction of flow by service and by condition
 
-It is possible to set both service granular flow restriction rules and conditional flow restriction rules, which is suitable for cases where an overall flow restriction rule needs to be set for all requests of a service, while exceptions need to be set for a certain group or groups of requests.
+It is possible to set both service granular rate limiting rules and conditional rate limiting rules, which is suitable for cases where an overall rate limiting rule needs to be set for all requests of a service, while exceptions need to be set for a certain group or groups of requests.
 
-For example, the following flow restriction rule sets an overall flow restriction rule for the service of 1000 messages/minute, and a separate flow restriction condition of 100 messages/minute for the ping interface.
+For example, the following rate limiting rule sets an overall rate limiting rule for the service of 1000 messages/minute, and a separate flow restriction condition of 100 messages/minute for the ping interface.
 
 ```yaml
 apiVersion: metaprotocol.aeraki.io/v1alpha1
