@@ -4,12 +4,12 @@ description:
 weight: 40
 ---
 
-## 安装示例程序
+## Installing the demo program
 
-如果你还没有安装示例程序，请参照 [快速开始](/docs/v1.0/quickstart/) 安装 Aeraki，Istio 及示例程序。
+If you haven't installed the demo program,Please refer to [Quick Start](./../quickstart.md) to install Aeraki, Istio, and demo programs.
 
-安装完成后，可以看到集群中增加了下面两个 NS，这两个 NS 中分别安装了基于 MetaProtocol 实现的 Dubbo 和 Thrift 协议的示例程序。
-你可以选用任何一个程序进行测试。
+After the installation, you can see that the following two NSs have been added to the cluster, and the demo applications for Dubbo and Thrift protocols based on the MetaProtocol implementation are installed in these two NSs.
+You can choose either of them to test.
 
 ```bash
 ➜  ~ kubectl get ns|grep meta
@@ -17,9 +17,9 @@ meta-dubbo        Active   16m
 meta-thrift       Active   16m
 ```
 
-## 模拟 thrift 服务调用失败
+## Simulate thrift service call failure
 
-通过下面的命令创建一个 thrift-sample-server-fake deployment，该 deployment 将在 thrift-sample-server service 中增加一个 endpoint。从下面的 yaml 可以看到，该 deployment 中并没有 thrift sample server，而是一个 nginx 容器。
+Create a  thrift-sample-server-fake deployment by using the command below，The deployment wil create an endpoint under thrift-sample-server service。As you can see from the yaml file below, there is no thrift sample server in the deployment, but rather an nginx container.
 
 ```bash
 kubectl apply -f- <<EOF
@@ -52,7 +52,7 @@ spec:
 EOF
 ```
 
-现在 thrift-sample-server service 中有三个 endpoint，其中 thrift-sample-server-fake 这个 deployment 中没有 thrift sample server，因此其对应的 endpoint "172.19.0.102" 并不能处理客户端的请求。从客户端的日志中可以看到每三次请求中就有一次错误信息：
+Now there are three endpoint under the thrift-sample-server service, among them the thrift-sample-server-fake deployment have no thrift sample server, so the corresponding endpoint "172.19.0.102" can not handle client requests. From the client log, you can see that there is an error message once in every three requests:
 
 ```bash
 ➜  ~  aerakictl_app_log client meta-thrift --tail 0 -f
@@ -74,9 +74,9 @@ org.apache.thrift.TApplicationException: meta protocol upstream request: remote 
 	at org.aeraki.HelloClient.main(HelloClient.java:44)
 ```
 
-## 创建熔断规则
+## Create circuit break rules
 
-通过下面的命令创建一个 Destination Rule：当请求连续出现 5 次错误后，就将出错的 upstream host 从 cluster 的负载均衡分组中移除。
+Create a Destination Rule by using the command below：When the request has 5 consecutive errors, the upstream host with the error is removed from the cluster's load balancing group.
 
 ```bash
 kubectl apply -f- <<EOF
@@ -95,7 +95,7 @@ spec:
 EOF
 ```
 
-此时查看客户端的输出，可以看到客户端在熔断规则指定的错误次数后，不再将请求发送到出错的 endpoint "172.19.0.102"。
+At this point, if you look at the output of the client, you can see that the client no longer sends requests to the error endpoint "172.19.0.102" after the number of errors specified by the fusion rule.
 
 ```bash
 org.apache.thrift.TApplicationException: meta protocol upstream request: remote connection failure '172.19.0.102:9090'
@@ -149,9 +149,9 @@ Hello Aeraki, response from thrift-sample-server-v2-86db7567f-z8vwz/172.19.0.98
 Hello Aeraki, response from thrift-sample-server-v1-c5cccb876-jmhhf/172.19.0.10
 ```
 
-## 理解原理
+## Understand what happened
 
-通过查看 envoy 的 stats 输出，可以看到 thrift-sample-server 发生了连续的请求错误，该出错的 host 被移除了该 cluster 的负载均衡分组。
+By looking at envoy's stats output, you can see that thrift-sample-server is experiencing continuous request errors, and the host with the error has been removed from the cluster's load balancing group.
 
 ```bash
 aerakictl_sidecar_stats client  meta-thrift|grep -i outlier
@@ -162,10 +162,4 @@ cluster.outbound|9090||thrift-sample-server.meta-thrift.svc.cluster.local.outlie
 luster.outbound|9090||thrift-sample-server.meta-thrift.svc.cluster.local.outlier_detection.ejections_enforced_total: 1
 cluster.outbound|9090||thrift-sample-server.meta-thrift.svc.cluster.local.outlier_detection.ejections_total: 1
 ```
-
-
-
-
-
-
 
