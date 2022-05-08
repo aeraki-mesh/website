@@ -1,15 +1,15 @@
 ---
-title: How to query and visualize metrics
+title: How to match and visualize metrics
 description: 
 weight: 50
 ---
 
-## Installing the sample program
+## Installing the demo program
 
-If you haven't already installed the sample program, please refer to [quick start](/docs/v1.0/quickstart/) to install Aeraki, Istio and the sample program.
+If you haven't already installed the demo program, please refer to [quick start](/docs/v1.0/quickstart/) to install Aeraki, Istio and the demo program.
 
-After the installation is complete, you can see that the following two NSs have been added to the cluster. Sample programs of the Dubbo and Thrift protocols based on MetaProtocol are installed in these two NSs respectively.
-You can choose any program to test.
+After the installation is complete, you can see that the following two NSs have been added to the cluster. Demo programs of the Dubbo and Thrift protocols based on MetaProtocol are installed in these two NSs respectively.
+You can choose either of them to test.
 
 ```bash
 ?  ~ kubectl get ns|grep meta
@@ -17,7 +17,7 @@ meta-dubbo        Active   16m
 meta-thrift       Active   16m
 ```
 
-Prometheus and Grafana have been installed in the istio-system NS, and Prometheus will collect requested metrics from the Sidecar Proxy. We can query these metrics through Prometheus and display them more friendly through Grafana's graphs.
+Prometheus and Grafana have been installed in the istio-system NS, and Prometheus will collect requested metrics from the Sidecar Proxy. We can match these metrics through Prometheus and display them more friendly through Grafana's graphs.
 
 ```bash
 ?  ~ kubectl get deploy -n istio-system
@@ -30,7 +30,7 @@ kiali                  1/1     1            1           46h
 prometheus             1/1     1            1           46h
 ```
 
-## Query request metrics via Prometheus
+## Match request metrics via Prometheus
 
 First forward the local port to the Prometheus service via the kubectl port-forward command
 
@@ -38,9 +38,9 @@ First forward the local port to the Prometheus service via the kubectl port-forw
 kubectl port-forward service/prometheus 9090:9090 -n istio-system
 ```
 
-Open http://127.0.0.1:9090/ in browser, query metrics. MetaProtocol's metrics names have a uniform prefix: "envoy_meta_protocol_$applicationProtocol", For example, Dubbo metrics have names prefixed with "envoy_meta_protocol_dubbo", Thrift metrics have names prefixed with "envoy_meta_protocol_thrift".
+Open http://127.0.0.1:9090/ in browser, match metrics. MetaProtocol's metrics names have a uniform prefix: "envoy_meta_protocol_$applicationProtocol", For example, Dubbo metrics have names prefixed with "envoy_meta_protocol_dubbo", Thrift metrics have names prefixed with "envoy_meta_protocol_thrift".
 
-Query the outbound request metrics of the Dubbo service:
+Match the outbound request metrics of the Dubbo service:
 ![](../prometheus-request-time.png)
 
 All metrics for Dubbo services:
@@ -62,9 +62,6 @@ Import the [dashboard json file](https://github.com/aeraki-mesh/aeraki/blob/mast
 Open the Aeraki Demo dashboard, you can see the relevant metrics charts of Dubbo and Thrift services, including QPS, request delay, request success rate, etc.
 
 ![](../grafana-metrics.png)
-
-
-
 
 
 
