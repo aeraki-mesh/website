@@ -4,12 +4,12 @@ description:
 weight: 30
 ---
 
-## 安装示例程序
+## Install the sample program
 
-如果你还没有安装示例程序，请参照 [快速开始](/docs/v1.0/quickstart/) 安装 Aeraki，Istio 及示例程序。
+If you haven't already installed the sample program，please Install  Aeraki，Istio and the sample program by referring to [Quick start](/docs/v1.0/quickstart/) .
 
-安装完成后，可以看到集群中增加了下面两个 NS，这两个 NS 中分别安装了基于 MetaProtocol 实现的 Dubbo 和 Thrift 协议的示例程序。
-你可以选用任何一个程序进行测试。
+After installation,you can catch sight of the following two NS to the cluster,which install the sample program for Dubbo and Thrift protocols ,based on MetaProtocol implementations, respectively.
+You can test whichever program you want to choose.
 
 ```bash
 ➜  ~ kubectl get ns|grep meta
@@ -17,24 +17,24 @@ meta-dubbo        Active   16m
 meta-thrift       Active   16m
 ```
 
-## 什么是全局限流
+## What is global_rate_limit
 
-和[本地限流](/zh/docs/v1.0/tutorials/local-rate-limit/)不同的是，在使用全局限流时，所有的服务实例共用一个限流配额。全局限流通过一个限流服务器来实现在多个服务实例之间共享限流配额。在收到请求时，服务服务端的 Sidecar Proxy 会先向限流服务器发送一个限流查询请求，限流服务器在其自身的配置文件中读取限流的规则，根据规则判断一个限流请求是否触发了限流条件，然后将限流结果返回给 Sidecar Proxy。 Sidecar Proxy 根据该限流结果决定是禁止本次请求还是继续处理本次请求。
+Different from [local-rate-limit](/zh/docs/v1.0/tutorials/local-rate-limit/)，When using global_rate_limit,all the examples of service share a limiting quota.Global_rate_limit uses a rate_limit  server to share the rate_limit quota among multiple service instances.When receiving a request, the Sidecar Proxy which services for server will first send send a query request for rate_limit to the rate_limit server，and the rate_limit server will read the rate_limit rules in its own configuration file，determine whether a rate_limit request triggers a rate_limit condition according to the rules,then return the rate_limit result to Sidecar Proxy.Finally Sidecar Proxy decide whether to prohibit this request or continue to process this request according to the rate_limit result.
 
 ![](../global-rate-limit.png)
 
-## 在何时使用全局限流
-全局限流的特点是限流判断在限流服务器处统一进行的，因此不会受到服务实例数量的影响。但全局限流也会引入限流服务器这额外一跳，会带来附加的网络延迟。在大量客户请求的情况下，限流服务器自身是一个潜在的瓶颈点，部署和管理比本地限流更为复杂。
+## When to use global_rate_limit
+Because of the feature of global_rate_limit,which is that the rate_limit judgment is made uniformly at the rate_limit server,it is not affected by the number of service instances。But global_rate_limit also introduces an extra hop of rate_limit servers.,which will bring additional network latency.In the case of a large number of customer requests，The rate_limit server itself is a potential bottleneck，its deployment and management are more complex than local rate_limit.
 
-如果用限流的目的是为了将服务实例的压力控制在合理的范围内，建议使用本地限流。因为本地限流是在每个服务实例的 Sidecar Proxy 处分别处理的，因此在这种场景下本地限流对服务实例的入向请求控制更为精确和合理。如果配合适当的 HPA 策略，在现有服务实例负载都打满的情况下还可以对服务实例进行水平扩容，保障服务的稳定运行。
+If the purpose of using rate_limit is to control the pressure of service instances within a reasonable range, it is recommended to use local_rate-limit.Because the local_rate_limit is processed separately at Sidecar proxy of each service instance, in this scenario, the local_rate_limit can control the incoming request of the service instance more accurately and reasonably.With the appropriate HPA strategy, the service instance can be horizontally expanded to ensure the stable operation of the service when the existing service instance is fully loaded.
 
-如果限流的目的是为了对某一个资源的访问实施全局访问策略，则应该使用全局限流。一个典型的例子是按照用户等级设置用户可以访问服务的频率。例如 Docker Hub 就按照用户等级对用户拉取镜像的次数实施了不同的限流策略，付费用户比免费用户享有更高次数的镜像拉取限额。
+If the purpose of rate_limit is to enforce a global access policy for access to a resource, global_rate-limit should be used. A typical example is setting how often users can access services by user level. For example, Docker Hub implements different rate_limit policies for the number of times users pull images according to the user level. Paid users enjoy higher image pull quotas than free users.
 
-## 部署限流服务器
+## Deploy a rate_limit server
 
-在示例程序中已经部署了限流服务器，并通过配置文件配置了限流规则，无需再单独部署。
+In the sample program, the rate_limit server has been deployed, and the rate_limit rules have been configured through the configuration file, so there is no need to deploy it separately.
 
-全局限流的限流规则需要在限流服务器的配置文件中进行设置。下面的限流规则表示对 sayHello 接口设置 10条/每分钟 的限流。
+The rate_limit rules for global_rate_limit need to be set in the configuration file of the rate_limit server. The following rate_limit rules indicate that a rate_limit of 10 per minute is set for the sayHello interface.
 
 ```yaml
 domain: production
@@ -46,17 +46,17 @@ descriptors:
       requests_per_unit: 5
 ```
 
-部署的相关脚本参见：https://github.com/aeraki-mesh/aeraki/tree/master/demo/metaprotocol-thrift/rate-limit-server
+For deployment related scripts, see：https://github.com/aeraki-mesh/aeraki/tree/master/demo/metaprotocol-thrift/rate-limit-server
 
-> 备注：因为全局限流的判断逻辑是在限流服务器中执行的，因此限流规则需要在限流服务器的配置文件中进行设置。
+> Remarks: Because the judgment logic of global_rate_limit is executed in the rate_limit server, the rate_limit rules need to be set in the configuration file of the rate_limit server.
 
-## 为服务启用限流
+## Enable rate-limit for the service
 
-通过 MetaRouter 为服务器启用限流，启用后，服务的 Sidecar Proxy 在收到请求后会向限流服务器发起限流请求，并根据请求的返回结果决定是继续处理该请求还是终止请求。
+Enable rate_limit  for the server through MetaRouter. After enabling, the sidecar proxy of the service will initiate a rate_limit request to rate_limit server after receiving the request, and decide whether to continue processing the request or terminate the request according to the return result of the request.
 
-下面的全局限流配置表示对 thrift-sample-server.meta-thrift.svc.cluster.local 服务的 sayHello 接口进行限流。向限流服务器发送的限流请求中的 domain 的值为 production，并且会将 method 属性作为 descriptor 加入限流请求中。注意这里设置的 domain 和 descriptor 必须和限流服务器中的限流配置相吻合。
+The following global_rate_limit configuration means limiting rate to the sayHello interface of the thrift-sample-server.meta-thrift.svc.cluster.local service. The value of domain in the rate_limit request sent to rate_limit server is production, and the method attribute will be added to the rate_limit request as a descriptor. Note that the domain and descriptor set here must match the rate_limit configuration in the rate_limit server.
 
-MetaRouter 中的限流设置中可以设置 match 条件，如果 match 条件存在，则表示只将符合条件的请求发送到限流服务器进行限流判断。如果 match 条件未设置，则表示该服务的所有请求都会发送到限流服务器进行判断。合理使用 match 条件可以在本地过滤掉不需要限流的请求，提高请求处理效率。
+A match condition can be set in the rate_limit settings in MetaRouter. If the match condition exists, it means that only requests that meet the conditions will be sent to the rate_limit server for rate_limit judgment. If the match condition is not set, it means that all requests for the service will be sent to rate_limit server for judgment. Reasonable use of match conditions can filter out requests that do not require rate_limit locally, improving request processing efficiency.
 ```yaml
 kubectl apply -f- <<EOF
 apiVersion: metaprotocol.aeraki.io/v1alpha1
@@ -82,7 +82,7 @@ spec:
 EOF
 ```
 
-使用 aerakictl 命令来查看客户端的应用日志，可以看到客户端每分钟只能成功执行 5 次请求：
+Using the aerakictl command to view the application log of the client, you can see that the client can only successfully execute 5 requests per minute:
 
 ```bash
 ➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
@@ -101,19 +101,19 @@ org.apache.thrift.TApplicationException: meta protocol local rate limit: request
 ...
 ```
 
-## 理解原理
+## Understand the principle
 
-在向 Sidecar Proxy 下发的配置中， Aeraki 在 VirtualInbound Listener 中服务对应的 FilterChain 中设置了 MetaProtocol Proxy。
+In the configuration delivered to the Sidecar Proxy, Aeraki sets the MetaProtocol Proxy in the FilterChain corresponding to the service in the VirtualInbound Listener.
 
-Aeraki 会将 MetaRouter 中配置的限流规则翻译为 global rate limit filter 的限流配置，通过 Aeraki 下发给 MetaProtocol Proxy。
+Aeraki will translate the rate_limit rules configured in the MetaRouter into the rate_limit configuration of the global_rate_limit filter, and send it to the MetaProtocol Proxy through Aeraki.
 
-可以通过下面的命令查看服务的 sidecar proxy 的配置：
+The configuration of the service's sidecar proxy can be viewed with the following command:
 
 ``` bash
 aerakictl_sidecar_config server-v1 meta-thrift |fx
 ```
 
-其中 Thrift 服务的 Inbound Listener 中的 MetaProtocol Proxy 配置如下所示：
+The MetaProtocol Proxy configuration in the Inbound Listener of the Thrift service is as follows:
 
 ```yaml
 {
@@ -176,10 +176,4 @@ aerakictl_sidecar_config server-v1 meta-thrift |fx
  }
 }
 ```
-
-
-
-
-
-
 
