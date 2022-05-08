@@ -6,7 +6,7 @@ weight: 10
 
 ## Installing the sample program
 
-If you haven't installed the sample program,Please refer to [Quick Start](. /... /quickstart.md) to install Aeraki, Istio, and sample programs.
+If you haven't installed the sample program,Please refer to [Quick Start](./../quickstart.md) to install Aeraki, Istio, and sample programs.
 
 After the installation, you can see that the following two NSs have been added to the cluster, and the sample applications for Dubbo and Thrift protocols based on the MetaProtocol implementation are installed in these two NSs.
 You can choose any of the programs to test.
