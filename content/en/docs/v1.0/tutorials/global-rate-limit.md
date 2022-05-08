@@ -19,16 +19,16 @@ meta-thrift       Active   16m
 
 ## What is global rate limiting?
 
-Unlike [local rate limiting](/zh/docs/v1.0/tutorials/local-rate-limit/), when using a global rate limiting, all service instances share a single rate limiting quota. A global rate limiting server is used to ensure that. When receiving a request, Sidecar Proxy on the server side will first send a rate limiting query request to rate limiting server, which will read the rules in its own configuration file, then determine whether the request triggers a rate limiting condition according to the rules, finally return result to Sidecar Proxy. Based on the result of this rate limiting, Sidecar Proxy decides whether to disable this request or to continue processing it.
+Unlike [local rate limiting](/zh/docs/v1.0/tutorials/local-rate-limit/), when using a global rate limiting, all service instances share a single rate limiting quota. A global rate limiting server is used to ensure that. When receiving a request, Sidecar Proxy on the server side will first send a rate limiting query request to rate limiting server, which will read the rules in its own configuration file, then determine whether the request triggers a rate limiting condition according to the rules, finally return result to Sidecar Proxy. Based on the result of this rate limiting, Sidecar Proxy decides whether to reject this request or to continue processing it.
 
 ![](../global-rate-limit.png)
 
 ## When to use global rate limiting?
-The feature of global rate limiting is that the limiting judgement is made uniformly at the rate limiting server and is therefore not affected by the number of service instances. However, global rate limiting also introduces an additional hop to the rate limiting server, which can introduce additional network latency. In the case of a large number of client requests, the rate limiting server itself is a potential bottleneck point and is more complex to deploy and manage than local limiting.
+In global rate limiting, the rate limiting decision is made at the global rate limiting server with a fixed quota, therefore, the number of client requests that are allowed to send to the server won't change even the number of service instances increases. Global rate limiting also introduces an additional hop at the request path, resulting in more latency. When there's a large number of client requests, the global rate limiting server may become a potential bottleneck. Besides, global rate limiting is more complicated to deploy and manage than local limiting.
 
-If the purpose of using rate limiting is to keep the pressure on the service instance within reasonable limits, it is recommended that local rate limiting be used. Because local rate limiting is handled separately at each service instance's Sidecar Proxy, local rate limiting is more precise and reasonable for controlling inbound requests to service instances in this scenario. With an appropriate HPA policy, it is also possible to horizontally scale the service instances when the existing service instances are fully loaded, ensuring stable service operation.
+If you just want to keep the number of requests sent to a single service instance within a reasonable limit, you should use local rate limiting. That's because local rate limiting is handled separately at each service instance's Sidecar Proxy, local rate limiting is more precise and reasonable for controlling inbound requests to service instances in this scenario. Used along with an appropriate HPA policy trigger by rate limiting metrics, we can keep the server cluster healthy by horizontally scaling the server cluster when all the existing service instances reach their limiting quota.
 
-If the purpose of rate limiting is to enforce a global access policy for access to a particular resource, then full rate limiting should be used. A typical example is to set how often a user can access a service according to user level. Docker Hub, for example, has a different rate limiting policy for the number of times a user can pull an image according to user level, with paid users having a higher limiting on the number of image pulls than free users.
+If you want to enforce a global access control policy to a particular resource, then global rate limiting should be used. A typical scenario is to set how often a user can access an API according to the user's service level agreement. Docker Hub, for example, has a rate limiting policy for how often a user can pull images from its registy. Paid users have a higher quota than free users.
 
 ## Deploy the rate limiting server
 
@@ -46,7 +46,7 @@ descriptors:
       requests_per_unit: 5
 ```
 
-For deployment scripts see:https://github.com/aeraki-mesh/aeraki/tree/master/demo/metaprotocol-thrift/rate-limit-server
+For deployment scripts see:https://github.com/aeraki-mesh/aeraki/tree/master/sample/metaprotocol-thrift/rate-limit-server
 
 > Note: Since the logic of global rate limiting is executed in the rate limiting server, the rate limiting rules need to be set in the configuration file of the rate limiting server.
 
@@ -54,7 +54,7 @@ For deployment scripts see:https://github.com/aeraki-mesh/aeraki/tree/master/dem
 
 Once rate limiting is enabled for the server via MetaRouter, the service's Sidecar Proxy will initiate a rate limiting request to the rate limiting server upon receipt of the request and will decide whether to continue processing the request or terminate it based on the return of the request.
 
-The following global rate limiting configuration represents a rate limiting to the sayHello interface of the thrift-demo-server.meta-thrift.svc.cluster.local service. The value of the domain in the rate limiting request sent to the rate limiting server is production and the method attribute is added to the rate limiting request as descriptor. Note that the domain and descriptor set here must match the rate limiting configuration in the rate limiting server.
+The following global rate limiting configuration represents a rate limiting to the sayHello interface of the thrift-sample-server.meta-thrift.svc.cluster.local service. The value of the domain in the rate limiting request sent to the rate limiting server is production and the method attribute is added to the rate limiting request as descriptor. Note that the domain and descriptor set here must match the rate limiting configuration in the rate limiting server.
 
 The match condition can be set in the rate limiting settings in MetaRouter.If the match condition is present, only requests that match the condition will be sent to the rate limiting server for judgement. If the match condition is not set, then all requests for that service will be sent to the rate limiting server for determination. The match condition can be used to filter out requests locally that do not require rate limiting, improving the efficiency of request processing.
 ```yaml
@@ -66,7 +66,7 @@ metadata:
   namespace: meta-thrift
 spec:
   hosts:
-  - thrift-demo-server.meta-thrift.svc.cluster.local
+  - thrift-sample-server.meta-thrift.svc.cluster.local
   globalRateLimit:
     domain: production
     match:
@@ -86,17 +86,17 @@ Using the aerakictl command to view the client's application log, you can see th
 
 ```bash
 ➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
-Hello Aeraki, response from thrift-demo-server-v1-5c8476684-842l6/172.17.0.40
-Hello Aeraki, response from thrift-demo-server-v2-6d5bcc885-hpx7n/172.17.0.41
-Hello Aeraki, response from thrift-demo-server-v1-5c8476684-842l6/172.17.0.40
-Hello Aeraki, response from thrift-demo-server-v2-6d5bcc885-hpx7n/172.17.0.41
-Hello Aeraki, response from thrift-demo-server-v1-5c8476684-842l6/172.17.0.40
+Hello Aeraki, response from thrift-sample-server-v1-5c8476684-842l6/172.17.0.40
+Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-hpx7n/172.17.0.41
+Hello Aeraki, response from thrift-sample-server-v1-5c8476684-842l6/172.17.0.40
+Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-hpx7n/172.17.0.41
+Hello Aeraki, response from thrift-sample-server-v1-5c8476684-842l6/172.17.0.40
 org.apache.thrift.TApplicationException: meta protocol local rate limit: request '6' has been rate limited
         at org.apache.thrift.TServiceClient.receiveBase(TServiceClient.java:79)
         at org.aeraki.HelloService$Client.recv_sayHello(HelloService.java:61)
         at org.aeraki.HelloService$Client.sayHello(HelloService.java:48)
         at org.aeraki.HelloClient.main(HelloClient.java:44)
-Connected to thrift-demo-server
+Connected to thrift-sample-server
 org.apache.thrift.TApplicationException: meta protocol local rate limit: request '7' has been rate limited
 ...
 ```
