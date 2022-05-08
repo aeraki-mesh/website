@@ -19,9 +19,9 @@ meta-thrift       Active   16m
 
 ## Request-level load balancing
 
-Istio uses TCP proxy to proxy non-HTTP client requests, and all requests from the same client TCP connection are sent to a single server instance. This leads to a problem: when clients use long connections, multiple server instances do not receive a balanced number of requests, and when the server side is overloaded, it cannot share the pressure on the existing server side even if it is scaled up in time.
+Istio uses TCP proxy to proxy non-HTTP client requests, and all requests from the same client TCP connection are sent to a single server instance. This leads to a problem: when clients use long connections, multiple server instances do not receive a balanced number of requests, and when the server side is overloaded, the incoming requests that come through the existing connections can't be distributed to new instances even though more instances are added to the pool of the server cluster to share the load.
 
-Aeraki supports seven layers (request level) of load balancing for any protocol developed based on MetaProtocol, so without any configuration, the client's proxy sends requests evenly to two different versions of the server side.
+Aeraki supports layer-7(request level) load balancing for  any protocol developed based on MetaProtocol, so without any configuration, the client's proxy sends requests evenly to two different versions of the server side.
 Let's use the aerakictl command to view the client's application logs and see that multiple requests on the same client connection are sent sequentially to two servers, v1 and v2.
 
 ```bash
@@ -34,11 +34,11 @@ Hello Aeraki, response from thrift-sample-server-v2-6d5bcc885-wglpc/172.17.0.93
 Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 ```
 
-## Routes requests to a specified version of the service by arbitrary properties
+## Routes requests to a specified version based on arbitrary properties
 
 MetaProtocol supports very flexible route matching conditions, any property that can be parsed from the protocol packet can be used for route matching conditions.
 
-> Note: Aeraki will create Listener according to the VIP of the service, and each service will have its own Listener, which avoids the routing table expansion problem caused by multiple services on the same port of the HTTP protocol, and the routing table only contains the routing information related to this service, thus greatly improving the routing query efficiency.
+> Note: Aeraki will create Listener according to the VIP of the service, and each service will have its own Listener, which avoids the routing table expansion problem caused by multiple services on the same port of the HTTP protocol, and the routing table only contains the routing information related to this service, thus greatly improving the route matching efficiency.
 
 Create a MetaRouter routing rule that routes the request to v1.
 
@@ -77,7 +77,7 @@ Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 ```
 
-## Flow data splitting
+## Traffic splitting
 
 Use MetaRouter routing rules to send client flows to different versions of the service in specified proportions.
 
@@ -125,7 +125,7 @@ Hello Aeraki, response from thrift-sample-server-v1-6d5bcc885-wglpc/172.17.0.93
 Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 ```
 
-## Understand the principles
+## Understand what happened
 
 In the configuration sent to the Sidecar Proxy, Aeraki sets up the MetaProtocol Proxy in the FilterChain of the Outbound Listener corresponding to the service, and specifies Aeraki as the RDS server in the MetaProtocol Proxy configuration.
 

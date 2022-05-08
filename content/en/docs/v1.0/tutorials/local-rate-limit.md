@@ -17,7 +17,7 @@ meta-dubbo        Active   16m
 meta-thrift       Active   16m
 ```
 
-Aeraki's rate limiting rules are designed to be intuitive and flexible, supporting both flow restriction for all inbound requests to a service and fine-grained flow restriction control for requests to a server based on different conditions.
+Aeraki's rate limiting rules are designed to be intuitive and flexible, supporting both rate limiting for all inbound requests to a service and fine-grained rate limiting control for requests to a server based on different conditions.
 
 ## Enforce rate limiting on all inbound requests of a service
 
@@ -62,13 +62,13 @@ org.apache.thrift.TApplicationException: meta protocol local rate limit: request
 ...
 ```
 
-## Restrict the flow of inbound requests to services by condition
+## Rate limiting of inbound requests to services by condition
 
-Aeraki supports multiple rate limiting rules for services based on conditions to meet fine-grained flow restriction requirements. For example, grouping requests by user or pair of interfaces and setting different rate limiting rules for each group. 
+Aeraki supports multiple rate limiting rules for services based on conditions to meet fine-grained rate limiting requirements. For example, grouping requests by user or pair of interfaces and setting different rate limiting rules for each group. 
 
-The matching conditions for grouped flow restriction are the same as those for routing, and any attributes that can be extracted from the request packet can be used for the matching conditions of the rate limiting rule.
+The matching conditions for grouped rate limiting are the same as those for routing, and any attributes that can be extracted from the request packet can be used for the matching conditions of the rate limiting rule.
 
-For example, the following rules set different flow restrictions for the sayHello and ping interfaces.
+For example, the following rules set different rate limiting for the sayHello and ping interfaces.
 
 ```yaml
 apiVersion: metaprotocol.aeraki.io/v1alpha1
@@ -99,11 +99,11 @@ spec:
         tokensPerFill: 100
 ```
 
-## Set rules for restriction of flow by service and by condition
+## Set rules for rate limiting by service and by condition
 
 It is possible to set both service granular rate limiting rules and conditional rate limiting rules, which is suitable for cases where an overall rate limiting rule needs to be set for all requests of a service, while exceptions need to be set for a certain group or groups of requests.
 
-For example, the following rate limiting rule sets an overall rate limiting rule for the service of 1000 messages/minute, and a separate flow restriction condition of 100 messages/minute for the ping interface.
+For example, the following rate limiting rule sets an overall rate limiting rule for the service of 1000 messages/minute, and a separate rate limiting condition of 100 messages/minute for the ping interface.
 
 ```yaml
 apiVersion: metaprotocol.aeraki.io/v1alpha1
@@ -130,7 +130,7 @@ spec:
         tokensPerFill: 100
 ```
 
-## Understand the principles
+## Understand what happened
 
 In the configuration issued to the Sidecar Proxy, Aeraki sets the MetaProtocol Proxy in the FilterChain corresponding to the service in the VirtualInbound Listener.
 
