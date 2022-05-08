@@ -4,12 +4,10 @@ description:
 weight: 60
 ---
 
-## 安装示例程序
+## Install demo program
 
-如果你还没有安装示例程序，请参照 [快速开始](/docs/v1.0/quickstart/) 安装 Aeraki，Istio 及示例程序。
-
-安装完成后，可以看到集群中增加了下面两个 NS，这两个 NS 中分别安装了基于 MetaProtocol 实现的 Dubbo 和 Thrift 协议的示例程序。
-你可以选用任何一个程序进行测试。
+After installation,you can catch sight of the following two NS to the cluster,which install the demo program for Dubbo and Thrift protocols ,based on MetaProtocol implementations, respectively.
+You can test whichever program you want to choose.
 
 ```bash
 ➜  ~ kubectl get ns|grep meta
@@ -17,13 +15,13 @@ meta-dubbo        Active   16m
 meta-thrift       Active   16m
 ```
 
-## 修改请求消息 Header
+## Modify the request message Header
 
-Aeraki 支持采用 MetaRouter 来修改消息 Header，我们可以采用下面的规则来修改请求消息的 Header。
+Aeraki supports the use of MetaRouter to modify the message header. We can use the following rules to modify the request message header.
 
-> 备注：Aeraki 和 MetaProtocol 在框架层支持了消息 header 的修改，至于某一种协议是否支持 header 修改，则取决于该协议 codec 的实现。如果要支持 header 修改，codec 实现需要处理 MetaProtocol 框架层传入的 mutation 结构体，在协议编码时将 mutation 结构体中的 key/value 键值写入到消息中。
+> Note: Aeraki and MetaProtocol support the modification of message headers at the framework layer. Whether a certain protocol supports modification of headers depends on the implementation of the protocol codec. To support header modification, the codec implementation needs to process the mutation structure passed in by the MetaProtocol framework layer, and write the key/value in the mutation structure into the message during protocol encoding.
 
-创建一条 MetaRouter 规则，增加 foo/bar, foo1/bar1 两个消息头：
+Create a MetaRouter rule and add two message headers foo/bar, foo1/bar1:
 
 ```bash
 kubectl apply -f- <<EOF
@@ -48,7 +46,7 @@ spec:
 EOF
 ```
 
-使用 aerakictl 命令来查看客户端的 sidecar 日志，可以看到增加的消息头：
+Use the aerakictl command to view the client sidecar log, you can see the added header:
 
 ```bash
 ➜  ~ aerakictl_sidecar_enable_debug client meta-thrift
@@ -57,19 +55,19 @@ EOF
 2022-03-10T06:42:25.605316Z	info	envoy filter	thrift: codec mutation foo1 : bar1
 ```
 
-## 理解原理
+## Understand the principle
 
-在向 Sidecar Proxy 下发的配置中， Aeraki 在服务对应的 Outbound Listener 的 FilterChain 中设置了 MetaProtocol Proxy，并在 MetaProtocol Proxy 配置中指定 Aeraki 为 RDS 服务器。
+In the configuration delivered to the Sidecar Proxy, Aeraki sets the MetaProtocol Proxy in the FilterChain of the Outbound Listener corresponding to the service, and specifies Aeraki as the RDS server in the MetaProtocol Proxy configuration.
 
-Aeraki 会将 MetaRouter 中配置的路由规则翻译为 MetaProtocol Proxy 的路由规则，通过 Aeraki 内置的 RDS 服务器下发给 MetaProtocol Proxy。
+Aeraki will translate the routing rules configured in MetaRouter into the routing rules of MetaProtocol Proxy, and send them to MetaProtocol Proxy through Aeraki's built-in RDS server.
 
-可以通过下面的命令查看 sidecar proxy 的配置：
+You can view the configuration of the sidecar proxy with the following command:
 
 ``` bash
 aerakictl_sidecar_config client meta-thrift |fx
 ```
 
-其中 Thrift 服务的 Outbound Listener 中的 MetaProtocol Proxy 配置如下所示：
+The MetaProtocol Proxy configuration in the Outbound Listener of the Thrift service is as follows:
 
 ```yaml
 {
@@ -110,7 +108,7 @@ aerakictl_sidecar_config client meta-thrift |fx
 }
 ```
 
-在导出的文件中还可以查看到目前 Proxy 中生效的 RDS 路由信息，可以看到路由中增加了相应的 header，如下所示：
+You can also view the RDS routing information that is currently in effect in the Proxy in the exported file, and you can catch sight of that the corresponding header is added to the routing, as shown below:
 
 ```yaml
 {
@@ -147,10 +145,4 @@ dynamic_route_configs": [
  "last_updated": "2022-01-11T10:26:37.357Z"
 }
 ```
-
-
-
-
-
-
 
