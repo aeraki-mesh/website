@@ -4,12 +4,12 @@ description:
 weight: 10
 ---
 
-## Installing the sample program
+## Installing the demo program
 
-If you haven't installed the sample program,Please refer to [Quick Start](./../quickstart.md) to install Aeraki, Istio, and sample programs.
+If you haven't installed the demo program,Please refer to [Quick Start](./../quickstart.md) to install Aeraki, Istio, and demo programs.
 
-After the installation, you can see that the following two NSs have been added to the cluster, and the sample applications for Dubbo and Thrift protocols based on the MetaProtocol implementation are installed in these two NSs.
-You can choose any of the programs to test.
+After the installation, you can see that the following two NSs have been added to the cluster, and the demo applications for Dubbo and Thrift protocols based on the MetaProtocol implementation are installed in these two NSs.
+You can choose either of them to test.
 
 ```bash
 ➜  ~ kubectl get ns|grep meta
@@ -17,7 +17,7 @@ meta-dubbo        Active   16m
 meta-thrift       Active   16m
 ```
 
-## Request-level load balance
+## Request-level load balancing
 
 Istio uses TCP proxy to proxy non-HTTP client requests, and all requests from the same client TCP connection are sent to a single server instance. This leads to a problem: when clients use long connections, multiple server instances do not receive a balanced number of requests, and when the server side is overloaded, it cannot share the pressure on the existing server side even if it is scaled up in time.
 
@@ -129,7 +129,7 @@ Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 
 In the configuration sent to the Sidecar Proxy, Aeraki sets up the MetaProtocol Proxy in the FilterChain of the Outbound Listener corresponding to the service, and specifies Aeraki as the RDS server in the MetaProtocol Proxy configuration.
 
-Aeraki interprets the routing rules configured in the MetaRouter as routing rules for the MetaProtocol Proxy, and then distributes them to the MetaProtocol Proxy through Aeraki's built-in RDS serve
+Aeraki translates MetaRouter to MetaProtocol route configuration, and then distributes them to the MetaProtocol Proxy through Aeraki's built-in RDS serve
 
 The configuration of the sidecar proxy can be viewed with the following command.
 
