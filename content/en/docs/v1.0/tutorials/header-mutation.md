@@ -6,6 +6,8 @@ weight: 60
 
 ## Install demo program
 
+If you haven't already installed the demo program，please Install  Aeraki，Istio and the demo program by referring to [Quick start](/docs/v1.0/quickstart/) .
+
 After installation,you can catch sight of the following two NS to the cluster,which install the demo program for Dubbo and Thrift protocols ,based on MetaProtocol implementations, respectively.
 You can test whichever program you want to choose.
 
