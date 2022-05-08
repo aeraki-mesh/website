@@ -41,7 +41,7 @@ spec:
 EOF
 ```
 
-> Note: Because local rate limiting is handled separately on each service instance, when the service has multiple instances, the actual flow limiting effect is the number of flow limiting times the number of instances.
+> Note: Because local rate limiting is handled separately on each service instance, when the service has multiple instances, the actual rate limiting effect is the number of rate limiting times the number of instances.
 
 
 Using the aerakictl command to view the client's application log, you can see that the client can only successfully execute 4 requests per minute (with two service instances, each limited to 2 requests per minute).
@@ -134,7 +134,7 @@ spec:
 
 In the configuration issued to the Sidecar Proxy, Aeraki sets the MetaProtocol Proxy in the FilterChain corresponding to the service in the VirtualInbound Listener.
 
-Aeraki translates the flow-limiting rules configured in the MetaRouter into a flow-limiting configuration for the local rate limit filter, which is distributed to the MetaProtocol Proxy through Aeraki.
+Aeraki translates the rate-limiting rules configured in the MetaRouter into a rate-limiting configuration for the local rate limit filter, which is distributed to the MetaProtocol Proxy through Aeraki.
 
 The configuration of the service's sidecar proxy can be viewed with the following command.
 
