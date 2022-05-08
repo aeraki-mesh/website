@@ -4,12 +4,12 @@ description:
 weight: 20
 ---
 
-## 安装示例程序
+## Installing the sample program
 
-如果你还没有安装示例程序，请参照 [快速开始](/docs/v1.0/quickstart/) 安装 Aeraki，Istio 及示例程序。
+If you haven't installed the sample program,Please refer to [Quick Start](./../quickstart.md) to install Aeraki, Istio, and sample programs.
 
-安装完成后，可以看到集群中增加了下面两个 NS，这两个 NS 中分别安装了基于 MetaProtocol 实现的 Dubbo 和 Thrift 协议的示例程序。
-你可以选用任何一个程序进行测试。
+After the installation, you can see that the following two NSs have been added to the cluster, and the sample applications for Dubbo and Thrift protocols based on the MetaProtocol implementation are installed in these two NSs.
+You can choose any of the programs to test.
 
 ```bash
 ➜  ~ kubectl get ns|grep meta
@@ -17,11 +17,11 @@ meta-dubbo        Active   16m
 meta-thrift       Active   16m
 ```
 
-Aeraki 的限流规则设计直观而灵活，既支持对一个服务的所有入向请求进行限流，也支持按照不同的条件对一个服务器的请求进行细粒度的限流控制。
+Aeraki's flow restriction rules are designed to be intuitive and flexible, supporting both flow restriction for all inbound requests to a service and fine-grained flow restriction control for requests to a server based on different conditions.
 
-## 对服务的所有入向请求进行限流
+## Restrict the flow of all inbound requests to the service
 
-下面的规则可以对 thrift-sample-server.meta-thrift.svc.cluster.local 服务的所有入向请求进行限流，限流设置为 2次请求/每分钟。
+The following rule limits all inbound requests to the thrift-sample-server.meta-thrift.svc.cluster.local service to 2 requests / minute.
 
 ```bash
 kubectl apply -f- <<EOF
@@ -41,10 +41,10 @@ spec:
 EOF
 ```
 
-> 备注：因为本地限流是在每一个服务实例上单独进行处理的，因此当服务有多个实例，实际的限流效果为限流次数乘以实例数量。
+> Note: Because local flow limiting is handled separately on each service instance, when the service has multiple instances, the actual flow limiting effect is the number of flow limiting times the number of instances.
 
 
-使用 aerakictl 命令来查看客户端的应用日志，可以看到客户端每分钟只能成功执行 4 次请求（有两个服务实例，每个服务实例限流为每分钟 2 次）：
+Using the aerakictl command to view the client's application log, you can see that the client can only successfully execute 4 requests per minute (with two service instances, each limited to 2 requests per minute).
 
 ```bash
 ➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
@@ -62,13 +62,13 @@ org.apache.thrift.TApplicationException: meta protocol local rate limit: request
 ...
 ```
 
-## 按条件对服务的入向请求进限流
+## Restrict the flow of inbound requests to services by condition
 
-Aeraki 支持按照条件为服务设置多个限流规则，以满足细粒度的限流要求。例如按照用户或者对接口对请求进行分组，并对每个分组设置不同的限流规则。 
+Aeraki supports multiple flow restriction rules for services based on conditions to meet fine-grained flow restriction requirements. For example, grouping requests by user or pair of interfaces and setting different flow restriction rules for each group. 
 
-分组限流的匹配条件和路由匹配条件相同，任何可以从请求数据包中提取出来的属性都可以用于限流规则的匹配条件。
+The matching conditions for grouped flow restriction are the same as those for routing, and any attributes that can be extracted from the request packet can be used for the matching conditions of the flow restriction rule.
 
-例如下面的规则为 sayHello 和 ping 两个接口分别设置了不同的限流条件：
+For example, the following rules set different flow restrictions for the sayHello and ping interfaces.
 
 ```yaml
 apiVersion: metaprotocol.aeraki.io/v1alpha1
@@ -99,11 +99,11 @@ spec:
         tokensPerFill: 100
 ```
 
-## 同时设置按服务和按条件的限流规则
+## Set rules for restriction of flow by service and by condition
 
-可以同时设置服务粒度的限流规则和按照条件的限流规则，这适用于需要对一个服务的所有请求设置一个整体的限流规则，同时又需要对某一组或者几组请求设置例外的情况。
+It is possible to set both service granular flow restriction rules and conditional flow restriction rules, which is suitable for cases where an overall flow restriction rule needs to be set for all requests of a service, while exceptions need to be set for a certain group or groups of requests.
 
-例如下面的限流规则为服务设置了一个 1000 条/分钟的整体限流规则，同时单独为 ping 接口设置了 100 条/分钟的限流条件。
+For example, the following flow restriction rule sets an overall flow restriction rule for the service of 1000 messages/minute, and a separate flow restriction condition of 100 messages/minute for the ping interface.
 
 ```yaml
 apiVersion: metaprotocol.aeraki.io/v1alpha1
@@ -130,19 +130,19 @@ spec:
         tokensPerFill: 100
 ```
 
-## 理解原理
+## Understand the principles
 
-在向 Sidecar Proxy 下发的配置中， Aeraki 在 VirtualInbound Listener 中服务对应的 FilterChain 中设置了 MetaProtocol Proxy。
+In the configuration issued to the Sidecar Proxy, Aeraki sets the MetaProtocol Proxy in the FilterChain corresponding to the service in the VirtualInbound Listener.
 
-Aeraki 会将 MetaRouter 中配置的限流规则翻译为 local rate limit filter 的限流配置，通过 Aeraki 下发给 MetaProtocol Proxy。
+Aeraki translates the flow-limiting rules configured in the MetaRouter into a flow-limiting configuration for the local rate limit filter, which is distributed to the MetaProtocol Proxy through Aeraki.
 
-可以通过下面的命令查看服务的 sidecar proxy 的配置：
+The configuration of the service's sidecar proxy can be viewed with the following command.
 
 ``` bash
 aerakictl_sidecar_config server-v1 meta-thrift |fx
 ```
 
-其中 Thrift 服务的 Inbound Listener 中的 MetaProtocol Proxy 配置如下所示：
+The configuration of the MetaProtocol Proxy in the Inbound Listener of the Thrift service is shown below.
 
 ```yaml
 {
