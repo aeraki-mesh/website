@@ -6,10 +6,9 @@ weight: 20
 
 ## Installing the demo program
 
-If you haven't installed the demo program,Please refer to [Quick Start](./../quickstart.md) to install Aeraki, Istio, and demo programs.
+If you haven't installed the demo program yet, Please refer to [Quick Start](./../quickstart.md) to install Aeraki, Istio, and the demo.
 
-After the installation, you can see that the following two NSs have been added to the cluster, and the demo applications for Dubbo and Thrift protocols based on the MetaProtocol implementation are installed in these two NSs.
-You can choose either of them to test.
+After installation, you can see that the following two NSs have been added to the cluster, and the Dubbo and Thrift demo applications are installed in these two NSs. You can choose either of them to test.
 
 ```bash
 ➜  ~ kubectl get ns|grep meta
@@ -17,7 +16,7 @@ meta-dubbo        Active   16m
 meta-thrift       Active   16m
 ```
 
-Aeraki's rate limiting rules are designed to be intuitive and flexible, supporting both rate limiting for all inbound requests to a service and fine-grained rate limiting control for requests to a server based on different conditions.
+Aeraki's rate limiting rules are designed to be flexible and easy to use, supporting both rate limiting for all inbound requests to a service and fine-grained rate limiting control based on specified conditions.
 
 ## Enforce rate limiting on all inbound requests of a service
 
@@ -44,7 +43,7 @@ EOF
 > Note: Because local rate limiting is handled separately on each service instance, when the service has multiple instances, the actual rate limiting effect is the number of rate limiting times the number of instances.
 
 
-Using the aerakictl command to view the client's application log, you can see that the client can only successfully execute 4 requests per minute (with two service instances, each limited to 2 requests per minute).
+Using the aerakictl command to view the client-side log, you can see that the client can only successfully send out 4 requests per minute (with two service instances, each limited to 2 requests per minute).
 
 ```bash
 ➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
@@ -62,11 +61,11 @@ org.apache.thrift.TApplicationException: meta protocol local rate limit: request
 ...
 ```
 
-## Rate limiting of inbound requests to services by condition
+## Rate limiting by condition
 
-Aeraki supports multiple rate limiting rules for services based on conditions to meet fine-grained rate limiting requirements. For example, grouping requests by user or pair of interfaces and setting different rate limiting rules for each group. 
+Aeraki supports setting multiple rate limiting rules for a service, each with different conditions. This is super useful if you need to enforce fine-grained rate limiting on a service. For example, you can set different quota for users based on their SLA(Service Level Agreement).
 
-The matching conditions for grouped rate limiting are the same as those for routing, and any attributes that can be extracted from the request packet can be used for the matching conditions of the rate limiting rule.
+Just like routing condtions, any attributes that can be extracted from the request packet can be used for the matching conditions of the rate limiting rule.
 
 For example, the following rules set different rate limiting for the sayHello and ping interfaces.
 
@@ -99,11 +98,11 @@ spec:
         tokensPerFill: 100
 ```
 
-## Set rules for rate limiting by service and by condition
+## Set rate limiting at both the service level and condition level
 
-It is possible to set both service granular rate limiting rules and conditional rate limiting rules, which is suitable for cases where an overall rate limiting rule needs to be set for all requests of a service, while exceptions need to be set for a certain group or groups of requests.
+It is possible to set both service level and condition level rate limiting, which is useful when you need to set a global quota for the whole service, but with a few exceptions.
 
-For example, the following rate limiting rule sets an overall rate limiting rule for the service of 1000 messages/minute, and a separate rate limiting condition of 100 messages/minute for the ping interface.
+For example, the following rate limiting rule sets an overall rate limiting rule for the service of 1000 messages/minute, with an exception of 100 messages/minute for the ping interface.
 
 ```yaml
 apiVersion: metaprotocol.aeraki.io/v1alpha1
@@ -132,9 +131,9 @@ spec:
 
 ## Understand what happened
 
-In the configuration issued to the Sidecar Proxy, Aeraki sets the MetaProtocol Proxy in the FilterChain corresponding to the service in the VirtualInbound Listener.
+In the configuration sent to the Sidecar Proxy, Aeraki sets the MetaProtocol Proxy in the FilterChain corresponding to the service in the VirtualInbound Listener.
 
-Aeraki translates the rate-limiting rules configured in the MetaRouter into a rate-limiting configuration for the local rate limit filter, which is distributed to the MetaProtocol Proxy through Aeraki.
+Aeraki translates the rate limiting rules configured in the MetaRouter into configuration for the local rate limit filter, and distributes the configuration to sidecar proxies.
 
 The configuration of the service's sidecar proxy can be viewed with the following command.
 
