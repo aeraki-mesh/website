@@ -6,7 +6,7 @@ weight: 20
 
 ## Installing the demo program
 
-If you haven't installed the demo program yet, Please refer to [Quick Start](./../quickstart/) to install Aeraki, Istio, and the demo.
+If you haven't installed the demo program yet, Please refer to [Quick Start](../../quickstart/) to install Aeraki, Istio, and the demo.
 
 After installation, you can see that the following two NSs have been added to the cluster, and the Dubbo and Thrift demo applications are installed in these two NSs. You can choose either of them to test.
 
