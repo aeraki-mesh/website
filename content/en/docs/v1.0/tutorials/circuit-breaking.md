@@ -6,10 +6,9 @@ weight: 40
 
 ## Installing the demo program
 
-If you haven't installed the demo program,Please refer to [Quick Start](./../quickstart.md) to install Aeraki, Istio, and demo programs.
+If you haven't installed the demo program yet, Please refer to [Quick Start](../../quickstart/) to install Aeraki, Istio, and the demo.
 
-After the installation, you can see that the following two NSs have been added to the cluster, and the demo applications for Dubbo and Thrift protocols based on the MetaProtocol implementation are installed in these two NSs.
-You can choose either of them to test.
+After installation, you can see that the following two NSs have been added to the cluster, and the Dubbo and Thrift demo applications are installed in these two NSs. You can choose either of them to test.
 
 ```bash
 ➜  ~ kubectl get ns|grep meta
@@ -19,7 +18,7 @@ meta-thrift       Active   16m
 
 ## Simulate thrift service call failure
 
-Create a  thrift-sample-server-fake deployment by using the command below，The deployment wil create an endpoint under thrift-sample-server service。As you can see from the yaml file below, there is no thrift sample server in the deployment, but rather an nginx container.
+Create a thrift-sample-server-fake deployment by using the command below，The deployment wil create an endpoint under thrift-sample-server service. As you can see from the yaml file below, there is no thrift sample server in the deployment, but rather an nginx container.
 
 ```bash
 kubectl apply -f- <<EOF
@@ -52,7 +51,7 @@ spec:
 EOF
 ```
 
-Now there are three endpoint under the thrift-sample-server service, among them the thrift-sample-server-fake deployment have no thrift sample server, so the corresponding endpoint "172.19.0.102" can not handle client requests. From the client log, you can see that there is an error message once in every three requests:
+Now there are three endpoint in the thrift-sample-server service, among them the thrift-sample-server-fake deployment have no real thrift server, so the corresponding endpoint "172.19.0.102" can not handle client requests. From the client log, you can see that there is an error message once in every three requests:
 
 ```bash
 ➜  ~  aerakictl_app_log client meta-thrift --tail 0 -f
@@ -74,9 +73,9 @@ org.apache.thrift.TApplicationException: meta protocol upstream request: remote 
 	at org.aeraki.HelloClient.main(HelloClient.java:44)
 ```
 
-## Create circuit break rules
+## Create a circuit break rule
 
-Create a Destination Rule by using the command below：When the request has 5 consecutive errors, the upstream host with the error is removed from the cluster's load balancing group.
+Create a Destination Rule by using the command below: When there're 5 consecutive errors, the corresponding upstream host will be removed from the cluster's load balancing pool.
 
 ```bash
 kubectl apply -f- <<EOF
@@ -95,7 +94,7 @@ spec:
 EOF
 ```
 
-At this point, if you look at the output of the client, you can see that the client no longer sends requests to the error endpoint "172.19.0.102" after the number of errors specified by the fusion rule.
+At this point, if you look at the output of the client, you can see that the client no longer sends requests to the failed endpoint "172.19.0.102" after the number of errors specified by the fusion rule.
 
 ```bash
 org.apache.thrift.TApplicationException: meta protocol upstream request: remote connection failure '172.19.0.102:9090'
@@ -151,7 +150,7 @@ Hello Aeraki, response from thrift-sample-server-v1-c5cccb876-jmhhf/172.19.0.10
 
 ## Understand what happened
 
-By looking at envoy's stats output, you can see that thrift-sample-server is experiencing continuous request errors, and the host with the error has been removed from the cluster's load balancing group.
+By looking at envoy's stats output, you can see that thrift-sample-server had consecutive request errors, and the failed host has been removed from the cluster's load balancing group.
 
 ```bash
 aerakictl_sidecar_stats client  meta-thrift|grep -i outlier
