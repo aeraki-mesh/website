@@ -6,10 +6,9 @@ weight: 30
 
 ## Installing the demo program
 
-If you haven't installed the demo program,Please refer to  [Quick Start](/docs/v1.0/quickstart/) to install Aeraki, Istio and demo programs.
+If you haven't installed the demo program yet, Please refer to [Quick Start](../../quickstart/) to install Aeraki, Istio, and the demo.
 
-Once the installation is complete, you can see the following two NSs have been added to the cluster,The two NSs have demo applications installed for Dubbo and Thrift protocols based on the MetaProtocol implementation respectively.
-You can choose either of them to test.
+After installation, you can see that the following two NSs have been added to the cluster, and the Dubbo and Thrift demo applications are installed in these two NSs. You can choose either of them to test.
 
 ```bash
 ➜  ~ kubectl get ns|grep meta
@@ -19,7 +18,7 @@ meta-thrift       Active   16m
 
 ## What is global rate limiting?
 
-Unlike [local rate limiting](/zh/docs/v1.0/tutorials/local-rate-limit/), when using a global rate limiting, all service instances share a single rate limiting quota. A global rate limiting server is used to ensure that. When receiving a request, Sidecar Proxy on the server side will first send a rate limiting query request to rate limiting server, which will read the rules in its own configuration file, then determine whether the request triggers a rate limiting condition according to the rules, finally return result to Sidecar Proxy. Based on the result of this rate limiting, Sidecar Proxy decides whether to reject this request or to continue processing it.
+Unlike [local rate limiting](../local-rate-limit/), when using a global rate limiting, all service instances share a single rate limiting quota. A global rate limiting server is used to ensure that. When receiving a request, Sidecar Proxy on the server side will first send a rate limiting query request to rate limiting server, which will read the rules in its own configuration file, then determine whether the request triggers a rate limiting condition according to the rules, finally return result to Sidecar Proxy. Based on the result of this rate limiting, Sidecar Proxy decides whether to reject this request or to continue processing it.
 
 ![](../global-rate-limit.png)
 
@@ -32,9 +31,9 @@ If you want to enforce a global access control policy to a particular resource, 
 
 ## Deploy the rate limiting server
 
-The rate limiting server is already deployed in the example application and the rate limiting rules are configured via the configuration file, so there is no need to deploy it separately.
+The rate limiting server has already been deployed in the example application, so you don't need to deploy the rate limiting server by youself.
 
-The rate limiting rules for global rate limiting need to be set in the configuration file of the rate limiting server. The following rate limiting rule indicates a rate limiting of 10 streams per minute for the sayHello interface.
+The rate limiting rules for global rate limiting need to be set in the rate limiting server side. The following rate limiting rule has already been set in the demo, which allows 5 request per minute for the sayHello interface.
 
 ```yaml
 domain: production
@@ -46,17 +45,18 @@ descriptors:
       requests_per_unit: 5
 ```
 
-For deployment scripts see:https://github.com/aeraki-mesh/aeraki/tree/master/sample/metaprotocol-thrift/rate-limit-server
+The deployment scripts can be found here: https://github.com/aeraki-mesh/aeraki/tree/master/sample/metaprotocol-thrift/rate-limit-server
 
-> Note: Since the logic of global rate limiting is executed in the rate limiting server, the rate limiting rules need to be set in the configuration file of the rate limiting server.
+> Note: Since the rate limiting decesion is made on the limiting server, the rate limiting rules need to be set in the configuration file of the rate limiting server.
 
 ## Enable rate limiting for services
 
-Once rate limiting is enabled for the server via MetaRouter, the service's Sidecar Proxy will initiate a rate limiting request to the rate limiting server upon receipt of the request and will decide whether to continue processing the request or terminate it based on the return of the request.
+Once rate limiting is enabled for a service via MetaRouter, the service's Sidecar Proxy will initiate a rate limiting request to the rate limiting server upon receipt of the request and will decide whether to continue processing the request or reject it based on the response of the rate limiting server.
 
-The following global rate limiting configuration represents a rate limiting to the sayHello interface of the thrift-sample-server.meta-thrift.svc.cluster.local service. The value of the domain in the rate limiting request sent to the rate limiting server is production and the method attribute is added to the rate limiting request as descriptor. Note that the domain and descriptor set here must match the rate limiting configuration in the rate limiting server.
+The following configuration sets rate limiting to the sayHello interface of the thrift-sample-server.meta-thrift.svc.cluster.local service. The value of the domain in the rate limiting request sent to the rate limiting server is production and the method attribute is added to the rate limiting request as descriptor. Note that the domain and descriptor set here must match the rate limiting configuration in the rate limiting server.
 
-The match condition can be set in the rate limiting settings in MetaRouter.If the match condition is present, only requests that match the condition will be sent to the rate limiting server for judgement. If the match condition is not set, then all requests for that service will be sent to the rate limiting server for determination. The match condition can be used to filter out requests locally that do not require rate limiting, improving the efficiency of request processing.
+If the match condition is present, only requests that match the condition will be sent to the rate limiting server. If the match condition is not set, then all requests for that service will be sent to the rate limiting server. The match condition can be used to filter out requests locally that do not require rate limiting, improving the efficiency of request processing.
+
 ```yaml
 kubectl apply -f- <<EOF
 apiVersion: metaprotocol.aeraki.io/v1alpha1
@@ -82,7 +82,7 @@ spec:
 EOF
 ```
 
-Using the aerakictl command to view the client's application log, you can see that the client can only successfully execute 5 requests per minute.
+Using the aerakictl command to view the client's application log, you can see that the client can only successfully send out 5 requests per minute.
 
 ```bash
 ➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
@@ -103,7 +103,7 @@ org.apache.thrift.TApplicationException: meta protocol local rate limit: request
 
 ## Understand what happened
 
-In the configuration issued to the Sidecar Proxy, Aeraki sets up the MetaProtocol Proxy in the FilterChain corresponding to the service in the VirtualInbound Listener.
+In the configuration sent to the Sidecar Proxy, Aeraki sets up the MetaProtocol Proxy in the FilterChain corresponding to the service in the VirtualInbound Listener.
 
 Aeraki translates MetaRouter to global rate limiting filter route configuration, which is distributed to the MetaProtocol Proxy via Aeraki.
 
