@@ -4,12 +4,11 @@ description:
 weight: 60
 ---
 
-## Install demo program
+## Installing the demo program
 
-If you haven't already installed the demo program，please Install  Aeraki，Istio and the demo program by referring to [Quick start](/docs/v1.0/quickstart/) .
+If you haven't installed the demo program yet, Please refer to [Quick Start](../../quickstart/) to install Aeraki, Istio, and the demo.
 
-After installation,you can catch sight of the following two NS to the cluster,which install the demo program for Dubbo and Thrift protocols ,based on MetaProtocol implementations, respectively.
-You can test whichever program you want to choose.
+After installation, you can see that the following two NSs have been added to the cluster, and the Dubbo and Thrift demo applications are installed in these two NSs. You can choose either of them to test.
 
 ```bash
 ➜  ~ kubectl get ns|grep meta
@@ -19,11 +18,11 @@ meta-thrift       Active   16m
 
 ## Modify the request message Header
 
-Aeraki supports the use of MetaRouter to modify the message header. We can use the following rules to modify the request message header.
+Aeraki supports header mutation. For example, we can use the following MetaRouter to modify the request message header.
 
-> Note: Aeraki and MetaProtocol support the modification of message headers at the framework layer. Whether a certain protocol supports modification of headers depends on the implementation of the protocol codec. To support header modification, the codec implementation needs to process the mutation structure passed in by the MetaProtocol framework layer, and write the key/value in the mutation structure into the message during protocol encoding.
+> Note: Aeraki and MetaProtocol framework support header mutation. Whether a certain application protocol supports header mutation depends on the implementation of the codec of that protocol. To support header modification, the codec implementation needs to get out the key/value pairs in the mutation structure and wrriten them into the outgoing message during the encoding phase.
 
-Create a MetaRouter rule and add two message headers foo/bar, foo1/bar1:
+Create a MetaRouter rule and add two message headers foo/bar, foo1/bar1 in the `requestMutation` part:
 
 ```bash
 kubectl apply -f- <<EOF
@@ -48,7 +47,7 @@ spec:
 EOF
 ```
 
-Use the aerakictl command to view the client sidecar log, you can see the added header:
+Use the aerakictl command to view the client-side log, you can see the added header:
 
 ```bash
 ➜  ~ aerakictl_sidecar_enable_debug client meta-thrift
@@ -57,7 +56,7 @@ Use the aerakictl command to view the client sidecar log, you can see the added 
 2022-03-10T06:42:25.605316Z	info	envoy filter	thrift: codec mutation foo1 : bar1
 ```
 
-## Understand the principle
+## Understand what happened
 
 In the configuration delivered to the Sidecar Proxy, Aeraki sets the MetaProtocol Proxy in the FilterChain of the Outbound Listener corresponding to the service, and specifies Aeraki as the RDS server in the MetaProtocol Proxy configuration.
 
