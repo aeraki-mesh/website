@@ -16,7 +16,7 @@ meta-dubbo        Active   16m
 meta-thrift       Active   16m
 ```
 
-## Modify the request message Header
+## Modify the request header
 
 Aeraki supports header mutation. For example, we can use the following MetaRouter to modify the request message header.
 
