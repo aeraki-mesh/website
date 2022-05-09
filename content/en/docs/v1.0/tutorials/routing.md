@@ -6,10 +6,9 @@ weight: 10
 
 ## Installing the demo program
 
-If you haven't installed the demo program,Please refer to [Quick Start](./../quickstart.md) to install Aeraki, Istio, and demo programs.
+If you haven't installed the demo program yet, Please refer to [Quick Start](./../quickstart.md) to install Aeraki, Istio, and the demo.
 
-After the installation, you can see that the following two NSs have been added to the cluster, and the demo applications for Dubbo and Thrift protocols based on the MetaProtocol implementation are installed in these two NSs.
-You can choose either of them to test.
+After installation, you can see that the following two NSs have been added to the cluster, and the Dubbo and Thrift demo applications are installed in these two NSs. You can choose either of them to test.
 
 ```bash
 ➜  ~ kubectl get ns|grep meta
@@ -19,10 +18,11 @@ meta-thrift       Active   16m
 
 ## Request-level load balancing
 
-Istio uses TCP proxy to proxy non-HTTP client requests, and all requests from the same client TCP connection are sent to a single server instance. This leads to a problem: when clients use long connections, multiple server instances do not receive a balanced number of requests, and when the server side is overloaded, the incoming requests that come through the existing connections can't be distributed to new instances even though more instances are added to the pool of the server cluster to share the load.
+Istio uses TCP proxy to proxy non-HTTP client requests, and all requests from the same client TCP connection are sent to a single server instance. This leads to some problems: when clients use long connections, multiple server instances do not receive a balanced number of requests. Furthermore, when the server side is overloaded, the incoming requests that come into the existing connections can't be redistributed to new server instances even though more instances are added to the pool of the server cluster to share the load.
 
-Aeraki supports layer-7(request level) load balancing for  any protocol developed based on MetaProtocol, so without any configuration, the client's proxy sends requests evenly to two different versions of the server side.
-Let's use the aerakictl command to view the client's application logs and see that multiple requests on the same client connection are sent sequentially to two servers, v1 and v2.
+Aeraki supports layer-7(request level) load balancing for any protocols developed based on MetaProtocol, so the client-side sidecar proxy sends requests evenly to these two server instances, enven though the client is using a single long TCP connection to connect to the server.
+
+Let's use the aerakictl command to view the client-side log, you'll see that client requests are sent to two server pods in turn, v1 and v2, like the following:
 
 ```bash
 ➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
@@ -36,9 +36,9 @@ Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 
 ## Routes requests to a specified version based on arbitrary properties
 
-MetaProtocol supports very flexible route matching conditions, any property that can be parsed from the protocol packet can be used for route matching conditions.
+MetaProtocol supports very flexible route matching conditions, any property that can be exacted from the protocol packet at decodding phase can be used for route matching conditions.
 
-> Note: Aeraki will create Listener according to the VIP of the service, and each service will have its own Listener, which avoids the routing table expansion problem caused by multiple services on the same port of the HTTP protocol, and the routing table only contains the routing information related to this service, thus greatly improving the route matching efficiency.
+> Note: Aeraki will create Listeners according to the VIP of the service, and each service will have its own Listener, which avoids the routing table expansion problem caused by multiple services on the same port of the HTTP protocol, and the routing table only contains the routing information related to this service, thus greatly improving the route matching efficiency.
 
 Create a MetaRouter routing rule that routes the request to v1.
 
@@ -65,7 +65,7 @@ spec:
 EOF
 ```
 
-Using the aerakictl command to view the client application logs, you can see that all requests from the client are routed to the v1 version.
+Using the aerakictl command to view the client-side log, you can see that all requests from the client are routed to the v1 version.
 
 ```bash
 ➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
@@ -79,7 +79,7 @@ Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 
 ## Traffic splitting
 
-Use MetaRouter routing rules to send client flows to different versions of the service in specified proportions.
+Use MetaRouter routing rules to send client requests to different versions of the service in specified proportions.
 
 ```bash
 kubectl apply -f- <<EOF
@@ -109,7 +109,7 @@ spec:
 EOF
 ```
 
-Using the aerakictl command to view the client application logs, you can see that the client requests were sent to v1 and v2 at the specified rate set in MetaRouter.
+Using the aerakictl command to view the client-side log, you can see that the client requests were sent to v1 and v2 at the specified weight set in MetaRouter.
 
 ```bash
 ➜  ~ aerakictl_app_log client meta-thrift -f --tail 10
@@ -129,7 +129,7 @@ Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 
 In the configuration sent to the Sidecar Proxy, Aeraki sets up the MetaProtocol Proxy in the FilterChain of the Outbound Listener corresponding to the service, and specifies Aeraki as the RDS server in the MetaProtocol Proxy configuration.
 
-Aeraki translates MetaRouter to MetaProtocol route configuration, and then distributes them to the MetaProtocol Proxy through Aeraki's built-in RDS serve
+Aeraki translates MetaRouter to MetaProtocol route configuration, and then distributes them to the MetaProtocol Proxy through Aeraki's built-in RDS server.
 
 The configuration of the sidecar proxy can be viewed with the following command.
 
