@@ -1,5 +1,5 @@
 ---
-title: How to match and visualize metrics
+title: How to query and visualize metrics
 description: 
 weight: 50
 ---
