@@ -129,9 +129,9 @@ Hello Aeraki, response from thrift-sample-server-v1-5c8476684-hr8hh/172.17.0.92
 
 In the configuration sent to the Sidecar Proxy, Aeraki sets up the MetaProtocol Proxy in the FilterChain of the Outbound Listener corresponding to the service, and specifies Aeraki as the RDS server in the MetaProtocol Proxy configuration.
 
-Aeraki translates MetaRouter to MetaProtocol route configuration, and then distributes them to the MetaProtocol Proxy through Aeraki's built-in RDS server.
+Aeraki translates MetaRouter to MetaProtocol route configuration, and then distributes them to the MetaProtocol Proxy through Aeraki’s built-in RDS server.
 
-The configuration of the sidecar proxy can be viewed with the following command.
+The configuration of the sidecar proxy can be viewed with the following command:
 
 ``` bash
 aerakictl_sidecar_config client meta-thrift |fx
