@@ -4,25 +4,25 @@ description:
 weight: 1000
 ---
 
-MetaProtocol Proxy 提供了一个良好的协议扩展机制，使得我们可以基于 MetaProtocol Proxy 快速实现一个自定义协议的七层代理。
+MetaProtocol Proxy provides a well-designed mechanism for protocol extensions, which allows us to quickly implement a seven-layer proxy for a custom protocol.
 
-由于 MetaProtocol Proxy 已经实现了一个七层协议代理所需的大部分功能，包括七层负载均衡、熔断、RDS 动态路由、本地限流、全局限流、Header 修改、请求 Metrics 收集等，更多丰富的功能还在持续开发中。因此基于 MetaProtocol 进行开发极大简化了实现一个七层网络代理的工作，我们只需要实现编解码的少量代码，即可得到一个自定义协议的七层代理。一般来说，实现一个自定义协议只需要数百行代码。
 
-在基于 MetaProtocol 实现数据面代理后，无需任何控制面编码，我们就可以通过 Aeraki 在 Isito 服务网格中对使用自定义协议的服务进行管理，为服务提供流量拆分、灰度发布、流量镜像、监控图表等服务治理能力。这是因为 Aeraki 可以识别基于 MetaProtocol 的任何七层协议，并在控制面提供用户友好的流量规则。Aeraki 会将这些流量规则翻译为 MetaProtocol 的配置后下发到数据面。
+MetaProtocol Proxy already implements most of the features needed for a Layer 7 proxy, including load balancing, fusion, RDS dynamic routing, local flow restriction, fully restricted flow, Header modification, request Metrics collection, etc., more rich features are still under development. Therefore, developing based on MetaProtocol greatly simplifies the work of implementing a Layer 7 web proxy, and we only need to implement a small amount of code for coding and decoding to get a Layer 7 proxy with a custom protocol. In general, only a few hundred lines of code are needed to implement a custom protocol.
 
-除了快速开发，节省工作量之外，采用 MetaProtocol 为服务网格开发自定义协议的另一个好处是该方案对 Istio，Envoy，以及 MetaProtocol Proxy 自身等上游开源项目是完全无侵入的，可以跟随上游项目进行快速迭代，充分利用上游项目新版本提供的新增能力，无需维护自有的 fork 分支。
+After implementing a data proxy based on MetaProtocol, without any control coding, we can manage services using custom protocols in the Isito service grid through Aeraki, providing service governance capabilities such as traffic splitting, gray release, traffic mirroring, monitoring charts, etc. for services. This is because Aeraki recognizes any Layer 7 protocol based on MetaProtocol and provides user-friendly traffic rules at the control plane. aeraki translates these traffic rules into MetaProtocol configurations and then dispatches them to the data plane.
 
-## 实现编解码接口
+Another benefit of using MetaProtocol to develop custom protocols for the service grid is that the solution is completely non-intrusive to upstream open source projects such as Istio, Envoy, and MetaProtocol Proxy itself. It allows rapid iterations to follow the upstream projects and take advantage of the new capabilities provided by new versions of the upstream projects without maintaining their fork branches.
 
-Aeraki 提供了一个应用协议扩展的示例 [awesomerpc](https://github.com/aeraki-mesh/meta-protocol-awesomerpc)。示例中包含了实现自定义协议的程序框架，可以该示例为基础进行修改，编写你自己的私有协议。
+## Implementation of codec interface
+Aeraki provides an example application protocol extension [awesomerpc](https://github.com/aeraki-mesh/meta-protocol-awesomerpc). The example contains a program framework that you can modify to write your private protocol.
 
 ```bash
 git clone https://github.com/aeraki-mesh/meta-protocol-awesomerpc.git my-protocol-proxy
 ```
 
-我们主要需要关注的是 `src/application_protocols/awesomerpc/` 目录下的 `awesomerpc_codec.h` 和 `awesomerpc_codec.cc` 。这两个文件定义了应用协议的 codec 的接口和实现代码。
+We need focus on `awesomerpc_codec.h` and `awesomerpc_codec.cc` in the `src/application_protocols/awesomerpc/` directory. These two files define the interface and implementation code for the codec of the application protocol.
 
-`awesomerpc_codec.h` 的定义如下，可以看到应用协议的 codec 继承于 `MetaProtocolProxy::Codec`。实现应用协议只需要实现 `decode`，`encode` 和 `onError` 三个方法即可。
+The definition of `awesomerpc_codec.h` is as follows, you can see that the application protocol codec is extended from `MetaProtocolProxy::Codec`. To implement the application protocol, you only need to implement the `decode`, `encode` and `onError` methods.
 
 ```c++
 /**
@@ -34,37 +34,37 @@ public:
   AwesomerpcCodec() {};
   ~AwesomerpcCodec() override = default;
 
-  //协议解码，需要解析 buffer 并填充 Metadata， Metadata 将被用于 MetaProtocol Proxy 的 filter，例如限流，路由的匹配条件
+  //For protocol decoding, the buffer needs to be parsed and populated with Metadata, which will be used for MetaProtocol Proxy filters, such as flow restriction and matching conditions for routes.
   MetaProtocolProxy::DecodeStatus decode(Buffer::Instance& buffer,
                                          MetaProtocolProxy::Metadata& metadata) override;
 
-  //协议编码，可以根据 Mutation 对请求或者响应数据包进行修改，例如增加、删除或者修改 header，修改后需要回写到 buffer 中
+  //Protocol encoding, the request or response packet can be modified according to Mutation, such as adding, deleting or modifying the header, which needs to be written back to the buffer after modification
   void encode(const MetaProtocolProxy::Metadata& metadata,
               const MetaProtocolProxy::Mutation& mutation, Buffer::Instance& buffer) override;
 
-  //错误编码，用于框架向客户端返回错误信息，例如未找到路由或者连接创建失败等，编码的数据需要写入到 buffer 中
+  //the framework uses err code to return error messages to the client, such as route not found or connection creation failure, etc., the encoded data needs to be written to the buffer
   void onError(const MetaProtocolProxy::Metadata& metadata, const MetaProtocolProxy::Error& error,
                Buffer::Instance& buffer) override;
 
 ...
 ```
 
-在编写 codec 时也可以参考 [dubbo](https://github.com/aeraki-mesh/meta-protocol-proxy/tree/master/src/application_protocols/dubbo) 和 [thrift](https://github.com/aeraki-mesh/meta-protocol-proxy/tree/master/src/application_protocols/thrift) 的 codec 实现。
+You can also refer to the [dubbo](https://github.com/aeraki-mesh/meta-protocol-proxy/tree/master/src/application_protocols/dubbo) and [thrift](https://github.com/aeraki-mesh/meta-protocol-proxy/tree/master/src/application_protocols/thrift) implementation when writing the codec.
 
-## 配置 WORKSPACE
+## Configuration WORKSPACE
 
-在根目录的 WORKSPACE 文件中配置 metaProtocol, envoy 和 Istio-Proxy 的依赖。
+Configure the metaProtocol, envoy and Istio-Proxy dependencies in the WORKSPACE file in the root directory.
 
-需要在 WORKSPACE 中配置 metaProtocol 的 git commit，envoy 和 Istio-Proxy 的依赖参考 metaProtocol 该 commit 中的 WORKSPACE 中的配置。版本依赖关系参见 [Aeraki 和 MetaProtocol 以及 Istio 的版本兼容性](/zh/docs/v1.0/install/#aeraki-%E5%92%8C-metaprotocol-%E4%BB%A5%E5%8F%8A-istio-%E7%9A%84%E7%89%88%E6%9C%AC%E5%85%BC%E5%AE%B9%E6%80%A7)。
+You need to configure the git commit of metaProtocol in WORKSPACE, and the dependencies of envoy and Istio-Proxy refer to the configuration in WORKSPACE in the commit of metaProtocol. See [Version compatibility between Aeraki and MetaProtocol and Istio](https://github.com/aeraki-mesh/website/blob/86dcc4d3fdebde9cec3f428dc7f2aca2b73713f9/content/en/docs/v1.0/install.md) for version dependencies.
 
 ```Starlark
 
-# 从 meta_protocol_proxy 的代码中获取 envoy 的依赖版本信息
+# Get the dependency version information of envoy from the meta_protocol_proxy code
 ENVOY_SHA = "98c1c9e9a40804b93b074badad1cdf284b47d58b"
 ENVOY_SHA256 = "4365a4c09b9a8b3c4ae34d75991fcd046f3e19d53d95dfd5c89209c30be94fe6"
 ......
 
-# 从 meta_protocol_proxy 的代码中获取 istio_proxy 的依赖版本信息
+# Get the istio_proxy dependency version information from the meta_protocol_proxy code
 http_archive(
     name = "io_istio_proxy",
     strip_prefix = "proxy-1.10.0",
@@ -73,7 +73,7 @@ http_archive(
 )
 ...... 
 
-# 设置 metaProtocol 的 git commit
+# set metaProtocol git commit
 git_repository(
   name = "meta_protocol_proxy",
   remote = "https://github.com/aeraki-mesh/meta-protocol-proxy.git",
@@ -81,11 +81,11 @@ git_repository(
 )
 ```
 
-## 编译
+## Compilation
 
-建议使用 Ubuntu 18.04 作为编译环境。
+It is recommended to use Ubuntu 18.04 as the build environment.
 
-安装编译所需软件：
+Install the required software for compiling:
 
 ```bash
 sudo wget -O /usr/local/bin/bazel https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-$([ $(uname -m) = "aarch64" ] && echo "arm64" || echo "amd64")
@@ -109,15 +109,15 @@ sudo apt update
 sudo apt-get install llvm-10 lldb-10 llvm-10-dev libllvm10 llvm-10-runtime clang-10 clang++-10 lld-10 gcc-10 g++-10
 ```
 
-构建二进制：
+Build binary:
 
 ```bash
 ./build.sh
 ```
 
-## 定义一个 ApplicationProtocol
+## Define a  ApplicationProtocol
 
-要在 Istio 中识别自定义协议，需要创建一个 Aeraki 的 ApplicationProtocol CRD 资源。
+To identify custom protocols in Istio, you need to create an Aeraki's ApplicationProtocol CRD resource.
 
 ```yaml
 apiVersion: metaprotocol.aeraki.io/v1alpha1
@@ -130,12 +130,13 @@ spec:
   codec: aeraki.meta_protocol.codec.my_protocol
 ```
 
-## 协议选择
+## Protocol Selection
 
-Aeraki 通过服务的前缀来识别基于 MetaProtocol 的应用协议，服务的端口名必须遵从该命名规则： tcp-metaprotocol-{application protocol}-xxx。
-服务定义可以采用 K8s service 或者 Istio ServiceEntry。
+Aeraki identifies MetaProtocol-based application protocols by the service prefix, and the port name of the service must follow this naming convention: tcp-metaprotocol-{application protocol}-xxx.
+Service definitions can be K8s service or Istio ServiceEntry.
 
-下面的 ServiceEntry 定义了一个 dubbo 服务：
+The following ServiceEntry defines a dubbo service:
+
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
 kind: ServiceEntry
@@ -155,7 +156,7 @@ spec:
   resolution: STATIC
 ```
 
-下面的 Service 定义了一个 Thrift 服务：
+The following Service defines a Thrift service:
 
 ```yaml
 apiVersion: v1
@@ -172,10 +173,4 @@ spec:
       targetPort: 9090
 ```
 
-> 备注：端口定义的前缀需要包含 "tcp"，这是因为 Istio 会将该服务作为 tcp 服务进行处理。 而 Aeraki 则会识别后面的应用协议并进行相应的七层处理。
-
-
-
-
-
-
+> Note: The prefix of the port definition needs to contain "tcp", this is because Istio will treat the service as a tcp service. Aeraki will recognize the application protocol that follows and process it accordingly at Layer 7.
