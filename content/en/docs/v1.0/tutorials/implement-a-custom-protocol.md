@@ -4,25 +4,25 @@ description:
 weight: 1000
 ---
 
-MetaProtocol Proxy provides a well-designed mechanism for protocol extensions, which allows us to quickly implement a seven-layer proxy for a custom protocol.
+MetaProtocol Proxy provides a well-designed mechanism to allows us to quickly implement a layer-7 proxy for a custom protocol.
 
 
-MetaProtocol Proxy already implements most of the features needed for a Layer 7 proxy, including load balancing, fusion, RDS dynamic routing, local flow restriction, fully restricted flow, Header modification, request Metrics collection, etc., more rich features are still under development. Therefore, developing based on MetaProtocol greatly simplifies the work of implementing a Layer 7 web proxy, and we only need to implement a small amount of code for coding and decoding to get a Layer 7 proxy with a custom protocol. In general, only a few hundred lines of code are needed to implement a custom protocol.
+MetaProtocol Proxy already has most of the features needed for a Layer-7 proxy building in, including load balancing, circuit breaker, RDS dynamic routing, local/global reate limiting, header mutation, metrics and tracing reporting, etc., more features are under the way. Therefore, creating a layer-7 protocol based on MetaProtocol for a custom protocol is very simple. We only need to implement the codec interface. Normally, it's only a few hundred lines of code.
 
-After implementing a data proxy based on MetaProtocol, without any control coding, we can manage services using custom protocols in the Isito service grid through Aeraki, providing service governance capabilities such as traffic splitting, gray release, traffic mirroring, monitoring charts, etc. for services. This is because Aeraki recognizes any Layer 7 protocol based on MetaProtocol and provides user-friendly traffic rules at the control plane. aeraki translates these traffic rules into MetaProtocol configurations and then dispatches them to the data plane.
+After implementing the data proxy based on MetaProtocol, without any control-plane coding, we can manage the services using those custom protocols in the Isito service mesh via Aeraki, providing service governance capabilities for those services, such as traffic splitting, canary releasing, traffic mirroring, etc. This is because Aeraki recognizes any Layer-7 protocol based on MetaProtocol and provides user-friendly traffic rules at the control plane. Aeraki translates these traffic rules into MetaProtocol configurations and then distribute them to the data plane.
 
-Another benefit of using MetaProtocol to develop custom protocols for the service grid is that the solution is completely non-intrusive to upstream open source projects such as Istio, Envoy, and MetaProtocol Proxy itself. It allows rapid iterations to follow the upstream projects and take advantage of the new capabilities provided by new versions of the upstream projects without maintaining their fork branches.
+Another benefit of using MetaProtocol to develop custom protocols in a service mesh is that the solution is completely non-intrusive to the upstream open source projects such as Istio, Envoy, and MetaProtocol Proxy itself. It allows rapid iterations to follow the upstream projects and take advantage of the new capabilities provided by new versions of the upstream projects without maintaining your own forked branches.
 
-## Implementation of codec interface
-Aeraki provides an example application protocol extension [awesomerpc](https://github.com/aeraki-mesh/meta-protocol-awesomerpc). The example contains a program framework that you can modify to write your private protocol.
+## Implementation the codec interface
+Aeraki provides a scaffold project [awesomerpc](https://github.com/aeraki-mesh/meta-protocol-awesomerpc) to demonstrate how to implement a custom protocol with MetaProtocol proxy. You can fork this repo and use it as the start point to build a layer-7 proxy for your proprietary protocol.
 
 ```bash
 git clone https://github.com/aeraki-mesh/meta-protocol-awesomerpc.git my-protocol-proxy
 ```
 
-We need focus on `awesomerpc_codec.h` and `awesomerpc_codec.cc` in the `src/application_protocols/awesomerpc/` directory. These two files define the interface and implementation code for the codec of the application protocol.
+The most important files are `awesomerpc_codec.h` and `awesomerpc_codec.cc` in the `src/application_protocols/awesomerpc/` directory. These two files define the interface and implementation code for the codec of the application protocol.
 
-The definition of `awesomerpc_codec.h` is as follows, you can see that the application protocol codec is extended from `MetaProtocolProxy::Codec`. To implement the application protocol, you only need to implement the `decode`, `encode` and `onError` methods.
+The definition of `awesomerpc_codec.h` is as follows, you can see that the application protocol codec is implementing the `MetaProtocolProxy::Codec` interface. To implement the application protocol, you only need to write the `decode`, `encode` and `onError` methods.
 
 ```c++
 /**
