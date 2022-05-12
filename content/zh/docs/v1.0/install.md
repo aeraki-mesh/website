@@ -14,7 +14,7 @@ minGoVers: 1.16
 | Aeraki       | MetaProtocol Proxy | Istio      |
 |:------------:|:----------------:|:------------:|
 | 1.0.x        | 1.0.x            | 1.10.x       |
-
+| 1.1.x        |       1.1.x      | 1.12.x       |
 ### 检查下面的 Istio 选项
 
 请修改 istio ConfigMap，加入下面的内容：
