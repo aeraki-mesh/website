@@ -1,9 +1,9 @@
 ---
-title: v1.0 文档
+title: v1.1 docs
 cascade:
-  version: v1.0
+  version: v1.1
   versName: &name v1.0
-  git_version_tag: v1.0.0
+  git_version_tag: 1.1.x
   exclude_search: false
 linkTitle: *name
 simple_list: true

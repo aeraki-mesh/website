@@ -87,8 +87,9 @@ params:
   # This menu appears only if you have at least one [params.versions] set.
   version_menu: Versions
   versions:
-    latest: v1.0
+    latest: v1.1
     all:
+      - v1.1
       - v1.0
     deprecation_warning: |-
       the documentation is no longer actively maintained.
@@ -164,11 +165,11 @@ outputs:
 menu:
   main:
     - name: Docs
-      url: /docs/v1.0/
+      url: /docs/v1.1/
       weight: -10
     - name: Blog
       pageref: /blog/
     - name: Install
-      url: /docs/v1.0/install/
-    - name: Demo
-      url: http://aeraki.zhaohuabing.com:3000/d/pgz7wp-Gz/aeraki-demo?orgId=1&refresh=10s&kiosk
+      url: /docs/v1.1/install/
+    #- name: Demo
+    #  url: http://aeraki.zhaohuabing.com:3000/d/pgz7wp-Gz/aeraki-demo?orgId=1&refresh=10s&kiosk
