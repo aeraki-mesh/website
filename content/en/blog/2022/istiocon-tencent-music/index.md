@@ -1,5 +1,5 @@
 ---
-title: Istiocon 2022 Talk: encent Music’s service mesh practice with Istio and Aeraki
+title: "Istiocon 2022 Talk: encent Music’s service mesh practice with Istio and Aeraki"
 subtitle: 
 description:  
 date: 2022-04-26
@@ -7,11 +7,11 @@ author: Huabing Zhao
 keywords: [aeraki]
 ---
 
-[This session](https://mp.weixin.qq.com/s/zp9q99mGyH2VD9Dij2owWg) will introduce Tencent music’s service mesh practice with Istio and Aeraki. Including:
+[This session](https://mp.weixin.qq.com/s/zp9q99mGyH2VD9Dij2owWg) talked about Tencent music’s service mesh practice with Istio and Aeraki. Including:
 
-How to extend Istio with Aeraki to manage the traffic of proprietary protocols
-Deep dive into Aeraki and MetaProtcol Proxy
-How Tencent Music leverage Istio and Aeraki to build a fully functional service mesh, managing both the HTTP and proprietary protocols
+* How to extend Istio with Aeraki to manage the traffic of proprietary protocols
+* Deep dive into Aeraki and MetaProtcol Proxy
+* How Tencent Music leverage Istio and Aeraki to build a fully functional service mesh, managing both the HTTP and proprietary protocols
 
 ## Slides
 
