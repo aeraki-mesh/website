@@ -31,6 +31,9 @@
 - name: zcy
   link: https://login.zcygov.cn/
   image: /img/zcy.png
+- name: zhipin
+  link: https://zhipin.com/
+  image: https://static.zhipin.com/zhipin-geek/v531/web/geek/images/logo-2x.png
 #- name: Hundsun
 #  link: https://www.hundsun.com/
 #  image: https://www.hundsun.com/assets/img/logo.591f4472.gif
