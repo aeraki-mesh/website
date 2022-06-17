@@ -61,7 +61,7 @@ markup:
 # Everything below this are Site Params
 
 params:
-  copyright: Aeraki Authors
+  copyright: Aeraki Mesh Authors
   description: >-
     Manage any layer-7 protocols in a service mesh
 
