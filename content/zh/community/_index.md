@@ -98,7 +98,7 @@ For Aeraki contribution guidelines, see [How to contribute][].
 [@aeraki]: https://twitter.com/zhaohuabing
 [aeraki-dev]: https://groups.google.com/forum/?hl=en#!forum/aeraki-dev
 [aeraki-youtube]: https://www.youtube.com/channel/UCQ6JsTHPRgCxqikna6xAatA
-[How to contribute]: https://github.com/aeraki-mesh/aeraki/blob/main/CONTRIBUTING.md
+[How to contribute]: https://github.com/aeraki-mesh/aeraki/blob/master/CONTRIBUTING.md
 [meeting-doc]: https://docs.qq.com/doc/DVnlud2hTdHBHZUVs
 [online]: https://meeting.tencent.com/p/6132525613
 [Pacific Time]: https://www.timeanddate.com/time/zones/pt
