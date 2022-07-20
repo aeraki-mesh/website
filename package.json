@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "_check-links": "make check-links",
+    "_check-links": "echo 'skip make check-links'",
     "build-and-serve": "npm run build && npm run serve",
     "build:preview": "hugo --cleanDestinationDir -e dev -DFE --minify --baseURL \"${DEPLOY_PRIME_URL:-/}\"",
     "build:production": "hugo --cleanDestinationDir --minify",
