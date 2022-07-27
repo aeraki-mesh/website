@@ -53,6 +53,7 @@ EOF
 ```bash
 ➜  ~  aerakictl_app_log provider meta-dubbo --tail 0 -f
 [05:06:34] Hello Aeraki, request from consumer: /127.0.0.6:49783
+Message headers:
 input/311
 remote.application/dubbo-sample-consumer
 batchJob/true
