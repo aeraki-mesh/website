@@ -52,13 +52,12 @@ EOF
 
 ```bash
 ➜  ~  aerakictl_app_log provider meta-dubbo --tail 0 -f
-[05:06:34] Hello Aeraki, request from consumer: /127.0.0.6:49783
+[05:06:34] Hello Aeraki, request from consumer: /127.0.0.6:60521
 Message headers:
-input/311
-remote.application/dubbo-sample-consumer
-batchJob/true
-foo/bar
-foo1/bar1
+ key: input value: 297
+ key: remote.application value: dubbo-sample-consumer
+ key: foo value: bar
+ key: foo1 value: bar1
 ```
 
 ## 理解原理
