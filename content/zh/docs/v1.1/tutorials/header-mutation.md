@@ -21,9 +21,9 @@ meta-thrift       Active   16m
 
 Aeraki 支持采用 MetaRouter 来修改消息 Header，我们可以采用下面的规则来修改请求消息的 Header。
 
-> 备注：Aeraki 和 MetaProtocol 在框架层支持了消息 header 的修改，至于某一种协议是否支持 header 修改，则取决于该协议 codec 的实现。如果要支持 header 修改，codec 实现需要处理 MetaProtocol 框架层传入的 mutation 结构体，在协议编码时将 mutation 结构体中的 key/value 键值写入到消息中。MetaProtocol Dubbo codec 实现已经提供了 header 修改的能力。
+> 备注：Aeraki 和 MetaProtocol 在框架层支持了消息 header 的修改，至于某一种协议是否支持 header 修改，则取决于该协议 codec 的实现。如果要支持 header 修改，codec 实现需要处理 MetaProtocol 框架层传入的 mutation 结构体，在协议编码时将 mutation 结构体中的 key/value 键值写入到消息中。
 
-创建一条 MetaRouter 规则，为发送给 demoservice 的 Dubbo 请求增加 foo/bar, foo1/bar1 两个消息头：
+MetaProtocol Dubbo codec 实现已经提供了 header 修改的能力。下面我们创建一条 MetaRouter 规则，为发送给 demoservice 的 Dubbo 请求增加 foo/bar, foo1/bar1 两个消息头：
 
 ```bash
 kubectl apply -f- <<EOF
@@ -48,7 +48,7 @@ spec:
 EOF
 ```
 
-使用 aerakictl 命令来查看 provider 的日志，可以看到增加的消息头：
+使用 aerakictl 命令来查看 provider 的日志，可以看到 provider 端收到的消息中已经带上了增加的 header：
 
 ```bash
 ➜  ~  aerakictl_app_log provider meta-dubbo --tail 0 -f
