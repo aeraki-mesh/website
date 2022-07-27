@@ -21,25 +21,25 @@ meta-thrift       Active   16m
 
 Aeraki 支持采用 MetaRouter 来修改消息 Header，我们可以采用下面的规则来修改请求消息的 Header。
 
-> 备注：Aeraki 和 MetaProtocol 在框架层支持了消息 header 的修改，至于某一种协议是否支持 header 修改，则取决于该协议 codec 的实现。如果要支持 header 修改，codec 实现需要处理 MetaProtocol 框架层传入的 mutation 结构体，在协议编码时将 mutation 结构体中的 key/value 键值写入到消息中。
+> 备注：Aeraki 和 MetaProtocol 在框架层支持了消息 header 的修改，至于某一种协议是否支持 header 修改，则取决于该协议 codec 的实现。如果要支持 header 修改，codec 实现需要处理 MetaProtocol 框架层传入的 mutation 结构体，在协议编码时将 mutation 结构体中的 key/value 键值写入到消息中。MetaProtocol Dubbo codec 实现已经提供了 header 修改的能力。
 
-创建一条 MetaRouter 规则，增加 foo/bar, foo1/bar1 两个消息头：
+创建一条 MetaRouter 规则，为发送给 demoservice 的 Dubbo 请求增加 foo/bar, foo1/bar1 两个消息头：
 
 ```bash
 kubectl apply -f- <<EOF
 apiVersion: metaprotocol.aeraki.io/v1alpha1
 kind: MetaRouter
 metadata:
-  name: test-metaprotocol-thrift-route
-  namespace: meta-thrift
+  name: test-metaprotocol-dubbo-route
+  namespace: meta-dubbo
 spec:
   hosts:
-    - thrift-sample-server.meta-thrift.svc.cluster.local
+    - org.apache.dubbo.samples.basic.api.demoservice
   routes:
     - name: header-mutation
       route:
         - destination:
-            host: thrift-sample-server.meta-thrift.svc.cluster.local
+            host: org.apache.dubbo.samples.basic.api.demoservice
       requestMutation:
         - key: foo
           value: bar
@@ -48,13 +48,16 @@ spec:
 EOF
 ```
 
-使用 aerakictl 命令来查看客户端的 sidecar 日志，可以看到增加的消息头：
+使用 aerakictl 命令来查看 provider 的日志，可以看到增加的消息头：
 
 ```bash
-➜  ~ aerakictl_sidecar_enable_debug client meta-thrift
-➜  ~ aerakictl_sidecar_log client meta-thrift  --tail 0 -f|grep mutation
-2022-03-10T06:42:25.605305Z	info	envoy filter	thrift: codec mutation foo : bar
-2022-03-10T06:42:25.605316Z	info	envoy filter	thrift: codec mutation foo1 : bar1
+➜  ~  aerakictl_app_log provider meta-dubbo --tail 0 -f
+[05:06:34] Hello Aeraki, request from consumer: /127.0.0.6:49783
+input/311
+remote.application/dubbo-sample-consumer
+batchJob/true
+foo/bar
+foo1/bar1
 ```
 
 ## 理解原理
@@ -66,10 +69,10 @@ Aeraki 会将 MetaRouter 中配置的路由规则翻译为 MetaProtocol Proxy �
 可以通过下面的命令查看 sidecar proxy 的配置：
 
 ``` bash
-aerakictl_sidecar_config client meta-thrift |fx
+aerakictl_sidecar_config consumer meta-dubbo |fx
 ```
 
-其中 Thrift 服务的 Outbound Listener 中的 MetaProtocol Proxy 配置如下所示：
+其中 Dubbo 服务的 Outbound Listener 中的 MetaProtocol Proxy 配置如下所示：
 
 ```yaml
 {
@@ -78,8 +81,8 @@ aerakictl_sidecar_config client meta-thrift |fx
   "@type": "type.googleapis.com/udpa.type.v1.TypedStruct",
   "type_url": "type.googleapis.com/aeraki.meta_protocol_proxy.v1alpha.MetaProtocolProxy",
   "value": {
-   "stat_prefix": "outbound|9090||thrift-sample-server.meta-thrift.svc.cluster.local",
-   "application_protocol": "thrift",
+   "stat_prefix": "outbound|20880||org.apache.dubbo.samples.basic.api.demoservice",
+   "application_protocol": "dubbo",
    "rds": {
     "config_source": {
      "api_config_source": {
@@ -95,10 +98,10 @@ aerakictl_sidecar_config client meta-thrift |fx
      },
      "resource_api_version": "V3"
     },
-    "route_config_name": "thrift-sample-server.meta-thrift.svc.cluster.local_9090"
+    "route_config_name": "org.apache.dubbo.samples.basic.api.demoservice_20880"
    },
    "codec": {
-    "name": "aeraki.meta_protocol.codec.thrift"
+    "name": "aeraki.meta_protocol.codec.dubbo"
    },
    "meta_protocol_filters": [
     {
@@ -114,37 +117,31 @@ aerakictl_sidecar_config client meta-thrift |fx
 
 ```yaml
 {
-@type": "type.googleapis.com/aeraki.meta_protocol_proxy.admin.v1alpha.RoutesConfigDump",
-dynamic_route_configs": [
-{
- "version_info": "1641896797",
+@type": "type.googleapis.com/aeraki.m{
+ "version_info": "1658895106",
  "route_config": {
-      "@type": "type.googleapis.com/aeraki.meta_protocol_proxy.config.route.v1alpha.RouteConfiguration",
-      "name": "thrift-sample-server.meta-thrift.svc.cluster.local_9090",
-      "routes": [
-       {
-        "name": "header-mutation",
-        "route": {
-         "cluster": "outbound|9090||thrift-sample-server.meta-thrift.svc.cluster.local"
-        },
-        "request_mutation": [
-         {
-          "key": "foo",
-          "value": "bar"
-         },
-         {
-          "key": "foo1",
-          "value": "bar1"
-         }
-        ]
-       }
-      ]
+  "@type": "type.googleapis.com/aeraki.meta_protocol_proxy.config.route.v1alpha.RouteConfiguration",
+  "name": "org.apache.dubbo.samples.basic.api.demoservice_20880",
+  "routes": [
+   {
+    "name": "header-mutation",
+    "route": {
+     "cluster": "outbound|20880||org.apache.dubbo.samples.basic.api.demoservice"
+    },
+    "request_mutation": [
+     {
+      "key": "foo",
+      "value": "bar"
      },
-     "last_updated": "2022-03-10T06:26:24.083Z"
-    }
-   ]
+     {
+      "key": "foo1",
+      "value": "bar1"
+     }
+    ]
+   }
+  ]
  },
- "last_updated": "2022-01-11T10:26:37.357Z"
+ "last_updated": "2022-07-27T04:11:46.143Z"
 }
 ```
 
