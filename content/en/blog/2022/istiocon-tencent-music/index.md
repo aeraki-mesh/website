@@ -1,5 +1,5 @@
 ---
-title: "Istiocon 2022 Talk: encent Music’s service mesh practice with Istio and Aeraki"
+title: "Istiocon 2022 Talk: Tencent Music’s service mesh practice with Istio and Aeraki"
 subtitle: 
 description:  
 date: 2022-04-26
