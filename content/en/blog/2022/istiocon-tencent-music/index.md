@@ -7,7 +7,7 @@ author: Huabing Zhao
 keywords: [aeraki]
 ---
 
-[This session](https://mp.weixin.qq.com/s/zp9q99mGyH2VD9Dij2owWg) talked about Tencent music’s service mesh practice with Istio and Aeraki. Including:
+[This session](https://events.istio.io/istiocon-2022/sessions/tencent-music-aeraki/) talked about Tencent music’s service mesh practice with Istio and Aeraki. Including:
 
 * How to extend Istio with Aeraki to manage the traffic of proprietary protocols
 * Deep dive into Aeraki and MetaProtcol Proxy
