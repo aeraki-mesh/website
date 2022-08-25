@@ -20,7 +20,7 @@ IstioCon 是 Istio 社区一年一度举行的全球线上峰会，此次峰会�
 * 腾讯音乐如何使用 Istio + Aeraki 来构建一个管理 HTTP 和私有协议的全功能服务网格
 
 ## 活动链接
-* [Istiocon 官网链接](https://mp.weixin.qq.com/s/zp9q99mGyH2VD9Dij2owWg)
+* [Istiocon 官网链接](https://events.istio.io/istiocon-2022/sessions/tencent-music-aeraki/)
 
 ## 演讲稿
 
