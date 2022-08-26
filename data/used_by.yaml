@@ -34,6 +34,9 @@
 - name: zhipin
   link: https://zhipin.com/
   image: https://static.zhipin.com/zhipin-geek/v531/web/geek/images/logo-2x.png
+- name: gtja
+  link: https://www.gtja.com
+  image: /img/gtja.jpg
 #- name: Hundsun
 #  link: https://www.hundsun.com/
 #  image: https://www.hundsun.com/assets/img/logo.591f4472.gif
