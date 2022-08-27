@@ -1,34 +1,33 @@
 ---
-title: Community
-description: Welcome to the Aeraki user and developer community page
+title: 社区
+description: 欢迎来到 Aeraki 用户与开发者社区
 spelling: cSpell:ignore grpcio grpcmeetings subreddit youtube
 main_channels:
   - title: >
       [<i class="fab fa-google"></i>Google Group][aeraki-dev]
     desc: >
-      Join the [aeraki-dev][] forum to ask questions and get the latest Aeraki news.
+      加入 [aeraki-dev][] 论坛，咨询问题以及获取 Aeraki 的最新资讯
   - title: >
       [<i class="fab fa-twitter"></i>Twitter][@aeraki]
     desc: >
-      Follow us at [@aeraki][] for real-time announcements, blogs posts, and more.
+      关注我们 - [@aeraki][] ，以获取实时的公告、博客帖文、等资讯
   - title: >
       [<i class="fab fa-stack-overflow"></i>Stack Overflow][SO]
     desc: >
-      Ask and find answers to your aeraki technical questions.
+      提出以及查找你关心的 aeraki 技术问题
 community_resources:
   - title: >
-      [<i class="fab fa-google"></i>Tencent Meeting][online]
+      [<i class="fab fa-google"></i>腾讯会议][线上]
     desc: >
-      Join contributors and maintainers [online][].
+      加入贡献者和维护者团队 [线上][]
   - title: >
-      [<i class="fas fa-file-alt"></i>Meeting doc][meeting-doc]
+      [<i class="fas fa-file-alt"></i>会议文档][会议文档]
     desc: >
-      For meeting details, consult the [Aeraki community meeting][meeting-doc] document.
+      查询 [Aeraki 社区会议][会议文档] 文档 来获取会议细节
   - title: >
       [<i class="fab fa-youtube"></i>YouTube][aeraki-youtube]
     desc: >
-      Missed a meeting? No problem. See the [Aeraki channel][aeraki-youtube] for
-      meeting videos.
+      错过了一次会议？没问题。可以去[Aeraki 频道][aeraki-youtube] 获取会议视频
 menu:
   main:
 ---
@@ -47,42 +46,32 @@ menu:
 <div class="col-12 col-lg-8">
 
 {{% alert color="success" %}}
-  <i class='fas fa-users mr-1'></i> Our community values respect and
-  inclusiveness. We enforce our [Code of Conduct][] in all interactions.
+  <i class='fas fa-users mr-1'></i>  我们的社区珍视互相尊重与互相包容的氛围，并且我们要求在所有的相互交流中执行我们的 [行为准则][]
 
-  [Code of Conduct]: https://github.com/cncf/foundation/blob/master/code-of-conduct.md
+  [行为准则]: https://github.com/cncf/foundation/blob/master/code-of-conduct.md
 {{% /alert %}}
 
-## Join the conversation
+## 参与交流
 
-Follow these active channels for timely announcements, and sign up to ask
-questions:
+关注这些活动频道，以便及时获取社区公告，以及咨询问题:
 
 {{% cards "main_channels" %}}
 
-## Community meetings
-
-Aeraki community don't hold meetings on a regular basis. An ad-hoc meeting will be proposed
-when the community have some technical topics that need to be discussed.
-
-For phone-in information, the date of the next meeting, and minutes from past
-meetings, see [Aeraki community meeting][meeting-doc].
+## 社区会议
+Aeraki 社区并没有定期举行会议。当社区有一些技术主题需要讨论时，快速开始一个临时的会议会更合适。
+关于直播信息、下次会议的时间、以及历史会议的记录，请参阅[Aeraki 社区会议][meeting-doc]
 
 {{% cards "community_resources" %}}
 
-## Code of Conduct
+## 行为准则
+Aeraki 社区遵循[CNCF 行为准则](https://github.com/cncf/foundation/blob/bec34a2614c980f8cfe38b18105e0baa820936cc/code-of-conduct.md).
+如果遭遇虐待、骚扰或其他不可接受的行为，请联系[Aeraki Project Owners](https://github.com/aeraki-mesh/aeraki#contact)
+中的一位或多位拥有者。
 
-Aeraki community follows the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/bec34a2614c980f8cfe38b18105e0baa820936cc/code-of-conduct.md).
+## 参与共享
+欢迎参与 Aeaki 的代码和文档的贡献，如果您发现了问题或者希望改进，您可以创建一个issue -- 或者跟进一步，考虑提交一个 pull request。
 
-Please report instances of abusive, harassing, or otherwise unacceptable behavior by contacting one or more of the [Aeraki Project Owners](https://github.com/aeraki-mesh/aeraki#contact).
-
-## Contributing
-
-Your contributions to Aeraki code and documentation are welcome! If you find a
-problem or would like an enhancement, create an issue -- or better yet, consider
-submitting a pull request.
-
-For Aeraki contribution guidelines, see [How to contribute][].
+关于 Aeraki 共享指南, 请参阅 [怎么共享][]。
 
 
 </div>
@@ -98,8 +87,8 @@ For Aeraki contribution guidelines, see [How to contribute][].
 [@aeraki]: https://twitter.com/zhaohuabing
 [aeraki-dev]: https://groups.google.com/forum/?hl=en#!forum/aeraki-dev
 [aeraki-youtube]: https://www.youtube.com/channel/UCQ6JsTHPRgCxqikna6xAatA
-[How to contribute]: https://github.com/aeraki-mesh/aeraki/blob/master/CONTRIBUTING.md
-[meeting-doc]: https://docs.qq.com/doc/DVnlud2hTdHBHZUVs
-[online]: https://meeting.tencent.com/p/6132525613
+[怎么共享]: https://github.com/aeraki-mesh/aeraki/blob/master/CONTRIBUTING.md
+[会议文档]: https://docs.qq.com/doc/DVnlud2hTdHBHZUVs
+[线上]: https://meeting.tencent.com/p/6132525613
 [Pacific Time]: https://www.timeanddate.com/time/zones/pt
 [SO]: https://stackoverflow.com/questions/tagged/aeraki
