@@ -28,7 +28,7 @@ Aeraki Mesh 在 1.1.0 版本中开始支持 [bRPC](https://brpc.apache.org/) 协
 * MetaProtocol Proxy 支持 Arm 架构
 * 提供用于编译 MetaProtocol 的 Docker 镜像
 * MetaProtocol 支持流式调用
-* MetaProtocol 支持采用 MetaData [设置负载均衡 Hash 策略](https://www.aeraki.net/zh/docs/v1.1/tutorials/consistent-hash-lb/#%E8%AE%BE%E7%BD%AE%E9%87%87%E7%94%A8-consistent-hash)
+* MetaProtocol 支持采用 MetaData [设置负载均衡 Hash 策略](https://www.aeraki.net/zh/docs/v1.x/tutorials/consistent-hash-lb/#%E8%AE%BE%E7%BD%AE%E9%87%87%E7%94%A8-consistent-hash)
 * MetaProtocol 支持在 Response 中回传服务器真实 IP 
 
 ## 感谢
