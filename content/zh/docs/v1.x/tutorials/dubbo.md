@@ -44,13 +44,19 @@ metadata:
   namespace: dubbo
 spec:
   hosts:
-    - org.apache.dubbo.samples.basic.api.demoservice
+  - org.apache.dubbo.samples.basic.api.demoservice
+  location: MESH_INTERNAL
+  ports:
+  - name: tcp-metaprotocol-dubbo
+    number: 20880
+    protocol: tcp
+    targetPort: 20880
+  resolution: STATIC
   addresses:
-  - 240.240.0.61
+  - 240.240.0.18
   endpoints:
-  - address: 172.18.0.59
+  - address: 172.17.0.97
     labels:
-      aeraki_meta_app_version: v2
       anyhost: "true"
       application: dubbo-sample-provider
       default: "true"
@@ -59,14 +65,19 @@ spec:
       dynamic: "true"
       generic: "false"
       interface: org.apache.dubbo.samples.basic.api.DemoService
+      metadata-type: remote
       methods: testVoid-sayHello
-      pid: "6"
-      release: 2.0-SNAPSHOT
-      revision: 2.0-SNAPSHOT
+      pid: "7"
+      registryName: default
+      release: 1.0-SNAPSHOT
+      revision: 1.0-SNAPSHOT
+      service_group: batchjob
       side: provider
-      timestamp: "1619599321039"
+      timestamp: "1663761491410"
+      version: v2
+    locality: bj/800005
     ports:
-      tcp-dubbo: 20880
+      tcp-metaprotocol-dubbo: 20880
     serviceAccount: default
 ```
 
@@ -182,7 +193,6 @@ git clone https://github.com/aeraki-mesh/dubbo2istio.git
 cd dubbo2istio
 kubectl create ns meta-dubbo
 kubectl label namespace meta-dubbo istio-injection=enabled --overwrite
-kubectl apply -f demo/k8s/aeraki-bootstrap-config.yaml -n meta-dubbo
 kubectl apply -f demo/k8s/zk -n meta-dubbo
 kubectl apply -f demo/traffic-rules/destinationrule.yaml -n meta-dubbo
 ```
