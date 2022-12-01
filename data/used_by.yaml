@@ -37,6 +37,9 @@
 - name: gtja
   link: https://www.gtja.com
   image: /img/gtja.jpg
+- name: shopline
+  link: https://shoplineapp.cn
+  image: https://shoplineapp.cn/images/%E5%AF%BC%E8%88%AAlogo.png
 #- name: Hundsun
 #  link: https://www.hundsun.com/
 #  image: https://www.hundsun.com/assets/img/logo.591f4472.gif
