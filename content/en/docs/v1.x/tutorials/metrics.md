@@ -25,42 +25,52 @@ aeraki                 1/1     1            1           46h
 grafana                1/1     1            1           46h
 istio-ingressgateway   1/1     1            1           46h
 istiod                 1/1     1            1           46h
-kiali                  1/1     1            1           46h
 prometheus             1/1     1            1           46h
 ```
 
 ## Query request metrics via Prometheus
 
-First forward the local port to the Prometheus service via the kubectl port-forward command
+Open Prometheus UI via the ```istioctl dashboard prometheus``` command.
 
 ```bash
-kubectl port-forward service/prometheus 9090:9090 -n istio-system
+istioctl dashboard prometheus
 ```
 
-Open http://127.0.0.1:9090/ in browser to query the metrics. MetaProtocol's metrics names have a fixed prefix: "envoy_meta_protocol_$applicationProtocol", For example, Dubbo metrics have names prefixed with "envoy_meta_protocol_dubbo", Thrift metrics have names prefixed with "envoy_meta_protocol_thrift".
+View metrics in the Prometheus UI. Aeraki Mesh provides Istio compatible metrics for non-HTTP protocols，including istio_requests_total，istio_request_duration_milliseconds，istio_request_byte, and istio_response_byte。
 
-Query the outbound request metrics of the Dubbo service:
-![](../prometheus-request-time.png)
-
-All metrics for Dubbo services:
-![](../prometheus-request.png)
-![](../prometheus-response.png)
+Below diagrams show metrics for the Dubbo demo application:
+istio_requests_total:
+![](../prometheus-request-total.png)
+istio_request_duration_milliseconds:
+![](../prometheus-duration_milliseconds.png)
+istio_request_byte:
+![](../prometheus-request-byte.png)
+istio_response_byte:
+![](../prometheus-response_byte.png)
 
 ## Visualize metrics via Grafana dashboard
 
-First forward the local port to the Grafana service via the ```kubectl port-forward``` command.
+Open Grafana UI via the ```istioctl dashboard grafana``` command.
 
 ```bash
-kubectl port-forward service/grafana 3000:3000 -n istio-system
+istioctl dashboard grafana
 ```
 
-Import the [dashboard json file](https://github.com/aeraki-mesh/aeraki/blob/master/demo/grafana-dashboard.json) provided by Aeraki into Grafana as shown below:
+Service dashboard:
+![](../istio-grafana-service.png)
 
-![](../grafana-import-dashboard.png)
+Workload dashboard:
+![](../istio-grafana-workload.png)
 
-Open the Aeraki demo dashboard, you can see the metrics charts of Dubbo and Thrift services, including QPS, request latency, request success rate, etc.
+## Labels
 
-![](../grafana-metrics.png)
+Aeraki Mesh provides the same labels as Istio does for metrics. Please refer to [Istio Metrics](https://istio.io/latest/docs/reference/config/metrics/#labels) for the definition of each label.
+
+Please note that the response code is different from HTTP protocol.
+
+* OK 0
+* Error 1
+
 
 
 

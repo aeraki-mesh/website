@@ -39,7 +39,7 @@ istioctl dashboard prometheus
 
 在浏览器中查询度量指标。Aeraki Mesh 为非 HTTP 协议提供了和 Istio 兼容的 metrics，包括 istio_requests_total，istio_request_duration_milliseconds，istio_request_byte 和 istio_response_byte。
 
-查询 Dubbo 服务的 outbound request 指标：
+查询 Dubbo 服务的指标：
 istio_requests_total 指标：
 ![](../prometheus-request-total.png)
 istio_request_duration_milliseconds 指标：
