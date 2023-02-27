@@ -5,14 +5,23 @@
 - name: Baidu
   link: https://www.baidu.com/
   image: /img/partners/baidu.png
+- name: zhipin
+  link: https://zhipin.com/
+  image: https://static.zhipin.com/zhipin-geek/v531/web/geek/images/logo-2x.png
 - name: Didi
   link: https://www.didiglobal.com/
   image: /img/partners/didi.png
 - name: 光子工作室
   link: https://guangzi.qq.com/
   image: /img/guangzi.png
+- name: gtja
+  link: https://www.gtja.com
+  image: /img/gtja.jpg
 - name: Iqiyi
   image: /img/iqiyi.png
+- name: shopline
+  link: https://shoplineapp.cn
+  image: https://shoplineapp.cn/images/%E5%AF%BC%E8%88%AAlogo.png
 - name: Tencent Cloud
   link: https://intl.cloud.tencent.com/
   image: /img/partners/tencent-cloud-en.png
@@ -34,15 +43,6 @@
 - name: zcy
   link: https://login.zcygov.cn/
   image: /img/zcy.png
-- name: zhipin
-  link: https://zhipin.com/
-  image: https://static.zhipin.com/zhipin-geek/v531/web/geek/images/logo-2x.png
-- name: gtja
-  link: https://www.gtja.com
-  image: /img/gtja.jpg
-- name: shopline
-  link: https://shoplineapp.cn
-  image: https://shoplineapp.cn/images/%E5%AF%BC%E8%88%AAlogo.png
 #- name: Hundsun
 #  link: https://www.hundsun.com/
 #  image: https://www.hundsun.com/assets/img/logo.591f4472.gif
