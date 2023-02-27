@@ -8,6 +8,9 @@
 - name: Didi
   link: https://www.didiglobal.com/
   image: /img/partners/didi.png
+- name: 光子工作室
+  link: https://guangzi.qq.com/
+  image: /img/guangzi.png
 - name: Iqiyi
   image: /img/iqiyi.png
 - name: Tencent Cloud
