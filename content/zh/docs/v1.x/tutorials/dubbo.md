@@ -22,7 +22,7 @@ Dubbo2Istio 可以连接 Dubbo 服务注册表，将其中注册的 Dubbo 服务
 Dubbo 是一种 RPC 协议，来源于 SOA 时代，因此没有严格遵循微服务原则将一个服务实现为一个进程。在 Dubbo 中，有一个 Interface 的概念，一个进程中通常会有多个I nterface。当将 Dubbo 应用加入到服务网格进行服务治理时，有两个选择：
 
 * 按应用（进程）粒度进行服务治理，即以应用作为 Mesh 中的一个 Service。
- * 优点：Mesh中的Service数量相对于接口级服务治理方案更少，控制面需要下发的xds配置少，控制面和Sidecar的资源占用相对小。
+ * 优点：Mesh 中的 Service 数量相对于接口级服务治理方案更少，控制面需要下发的xds配置少，控制面和 Sidecar 的资源占用相对小。
  * 缺点：无法按照Interface进行流量治理，包括灰度发布、限流、流量镜像等，只能按照应用级别进行流量治理。
 
 * 按接口（Interface）粒度进行服务治理，即以 Dubbo Interface 作为 Mesh 中的一个 Service。
