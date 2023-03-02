@@ -17,11 +17,28 @@ Aeraki 和 Istio 则一起作为控制面，通过 xDS 控制面标准接口下�
 
 Dubbo2Istio 可以连接 Dubbo 服务注册表，将其中注册的 Dubbo 服务转换为 ServiceEntry 资源，自动同步到 Istio 服务网格中。Dubbo2Istio 支持 ZooKeeper，Nacos，Etcd 三种类型的 Dubbo 服务注册表。
 
+# 应用级服务治理和接口级服务治理
+
+Dubbo 是一个来自 SOA 时代的 RPC 协议，因此并未严格按照微服务的原则将一个服务实现为一个进程。在 Dubbo 中有一个 Interface 的概念，一个进程中一般会有多个 Interface。我们在将 Dubbo 应用加入到服务网格进行服务治理时有两个选择：
+
+* 以应用（进程）粒度进行服务治理：即以应用作为 Mesh 中的一个 Service
+  * 优点：Mesh 中 Service 数量相对于接口级服务治理方案更少，控制面需要下发 的 xds 配置少， 控制面和 Sidecar 的资源占用相对小。
+  * 缺点：无法按照 Interface 进行流量治理，包括灰度发布、限流、流量镜像等，只能按照应用级别进行流量治理。
+* 以接口（Interface）粒度进行服务治理
+  * 优点：可以 Interface 进行流量治理，包括灰度发布、限流、流量镜像等。
+  * 缺点：无法按照 Interface 进行流量治理，包括灰度发布、限流、流量镜像等，只能按照应用级别进行流量治理。
+
+可见两种治理方式各有优缺点，一般来说，当 Dubbo 应用的规模较大，Interface 较多的情况下，建议选择按照应用粒度进行服务治理，以减轻控制面负荷和 sidecar 的资源消耗。当 Dubbo 应用规模较小，Interface 数量较少的情况下，建议选择按照 Interface 粒度进行服务治理，以提供最精细的流量治理能力。
+
+Aeraki Mesh 同时支持应用级和接口级服务治理，除了流量治理的粒度不同之外，这两种模式的路由，Metrics，Access log，Tracing 等能力是一致的。您可以根据自己的需要进行选择。
+
 # 将 Dubbo 服务加入到服务网格中
 
 ## 对接 Dubbo 服务注册
 
 ### 采用 Dubbo2Istio 对接 Dubbo 服务注册表
+
+> 备注：由于 Dubbo 注册表中是按照 Interface 粒度进行注册的，因此 Aeraki Mesh 提供的 Dubbo2Istio 目前只提供 Interface 级别的服务同步。如果您需要应用级别的服务同步，可以在 Dubb2Istio 的基础上进行修改，按照业务逻辑来将 Dubbo 注册表中的注册信息按照应用粒度提取出来，生成 Service Entry。也可以直接通过 Kubernetes Service 来按应用级别注册 Dubbo 服务（参考该 [Demo](https://github.com/aeraki-mesh/aeraki/tree/master/demo/metaprotocol-dubbo-app-level)）。
 
 这种方法需要在在 K8s 集群中部署一个 Dubbo2Istio 组件。Dubbo2Istio 将会监控 Dubbo 注册表的变化，自动将 Dubbo 注册表中的 Dubbo 服务同步到 Istio 内部的服务注册表中。该方法需要维护一个额外的 Dubbo2Istio 组件，好处是保留了 Dubbo 原有的服务注册表，同时兼容服务网格和 Dubbo SDK 两种服务发现方式，可以将 Dubbo 程序进行有计划地迁移到服务网格。
 
@@ -139,6 +156,8 @@ spec:
 
 ### 采用 ServiceEntry 
 
+> 备注：如果是进行应用级的服务治理，可以直接通过 Kubernetes Service 来注册 Dubbo 服务（参考该 [Demo](https://github.com/aeraki-mesh/aeraki/tree/master/demo/metaprotocol-dubbo-app-level)）。
+
 如果 Dubbo 应用已经实现容器化并部署在了 K8s 中，并且不需要同时保留原有的 Dubbo SDK 服务发现方式，则可以直接编写 yaml 文件来将 Dubbo interface 定义为一个 Istio ServiceEntry。这种方式无需维护 Dubbo2Istio，也无需增加 Dubbo 自定义参数，运维和配置更为简单。Service Entry 的定义如下所示：
 
 ```yaml
@@ -164,19 +183,45 @@ spec:
 
 ## 短路 Dubbo SDK 服务发现
 
-加入服务网格后，应用程序将使用服务网格中的服务发现能力，不再需要使用 Dubbo 注册中心进行服务发现。因此需要修改客户端的配置文件，直接设置 Dubbo interface 对应的服务端 url。我们将 url 设置为服务对接时约定的 Dubbo Interface 的全小写形式，如 "org.apache.dubbo.samples.basic.api.demoservice"），如下所示：
+加入服务网格后，应用程序将使用服务网格中的服务发现能力，不再需要使用 Dubbo 注册中心进行服务发现。有两种方式可以短路 Dubbo SDK 的服务发现：
 
-```yaml
-<dubbo:reference id="demoService" check="true" interface="org.apache.dubbo.samples.basic.api.DemoService" url="dubbo://org.apache.dubbo.samples.basic.api.demoservice:20880" timeout="3000"/>
-```
+* 采用 resolve 文件，由于 resolve 文件的位置可以通过命令行传入，该修改方式不用修改源代码中的配置文件，是一种对已有应用程序完全无侵入的方式，我们将 url 设置为服务对接时约定的 Dubbo Interface 的全小写形式，如 "org.apache.dubbo.samples.basic.api.demoservice"），如下所示:  
+
+    在启动命令中加入 reslove 文件参数：
+    ```
+    java -Ddubbo.resolve.file=./dubbo-resolve.properties
+    ```
+    在 resolve 文件中配置服务的url：
+    ```
+    org.apache.dubbo.samples.basic.api.DemoService=dubbo://org.apache.dubbo.samples.basic.api.demoservice:20880
+    org.apache.dubbo.samples.basic.api.TestService=dubbo://org.apache.dubbo.samples.basic.api.testservice:20880
+    org.apache.dubbo.samples.basic.api.ComplexService=dubbo://org.apache.dubbo.samples.basic.api.complexservice:20880
+    org.apache.dubbo.samples.basic.api.SecondService=dubbo://org.apache.dubbo.samples.basic.api.secondservice:20880
+    ```
+
+* 也可以修改客户端的配置文件，在客户端配置文件中设置 Dubbo interface 对应的服务端 url：
+
+    ```yaml
+    <dubbo:reference id="demoService" check="true" interface="org.apache.dubbo.samples.basic.api.DemoService" url="dubbo://org.apache.dubbo.samples.basic.api.demoservice:20880" timeout="3000"/>
+    ```
 
 # Demo 应用
 
-## 直接定义 ServiceEntry 的 Demo 应用
+## 采用 ServiceEntry 的 Demo 应用（Interface 级流量治理）
 
 直接参照 [快速开始](/zh/docs/v1.x/quickstart/) 即可安装 Aeraki，Istio 及 Dubbo 示例程序。
 
-## 使用 Dubbo2Istio 对接 Dubbo 注册表 的 Demo 应用
+## 采用 Service 的 Demo 应用（应用级流量治理）
+
+首先参照 [快速开始](/zh/docs/v1.x/quickstart/) 即可安装 Aeraki 和 Istio。
+
+快速开始中安装的 Dubbo 示例程序是 Interface 级的流量治理，执行下面的命令可以安装应用级流量治理的示例程序。
+
+```bash
+./demo/metaprotocol-dubbo-app-level/install.sh
+```
+
+## 使用 Dubbo2Istio 对接 Dubbo 注册表 的 Demo 应用（Interface 级流量治理）
 
 首先参照 [快速开始](/zh/docs/v1.x/quickstart/) 即可安装 Aeraki 和 Istio。
 
