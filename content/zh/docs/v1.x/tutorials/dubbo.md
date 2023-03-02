@@ -4,7 +4,7 @@ description:
 weight: 1000
 ---
 
-Aeraki Mesh 支持对 Dubbo 服务进行全面的七层服务治理，服务治理的粒度是 Dubbo interface。治理能力包括七层负载均衡，动态路由，熔断，本地/全局限流，请求层面的 Metrics 收集和呈现等，后面还会支持调用跟踪，流量镜像等能力。 本文将介绍如何将 Dubbo 服务接入到 Aeraki Mesh 中进行服务治理。
+Aeraki Mesh 支持对 Dubbo 服务进行全面的七层服务治理，治理能力包括七层负载均衡，动态路由，熔断，本地/全局限流，流量镜像，请求层面的 Metrics 收集和呈现等，调用跟踪，访问日志等能力。 本文将介绍如何将 Dubbo 服务接入到 Aeraki Mesh 中进行服务治理。
 
 # Aeraki Mesh Dubbo 解决方案
 
