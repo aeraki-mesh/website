@@ -95,6 +95,9 @@ spec:
 EOF
 ```
 
+> 备注：
+Aeraki Mesh 并没有为熔断规则创建新的 CRD，而是直接复用了 Istio 的 Destination Rule。这里 DR 规则中 ```consecutive5xxErrors``` 参数在 Aeraki Mesh 中指的是应用协议请求的连续错误次数，而不是 HTTP 协议的 5xx 错误次数。
+
 此时查看客户端的输出，可以看到客户端在熔断规则指定的错误次数后，不再将请求发送到出错的 endpoint "172.19.0.102"。
 
 ```bash
