@@ -1,7 +1,7 @@
 ---
 title: Redis 故障注入
 description: 
-weight: 05
+weight: 10
 ---
 
 采用 [RedisService](https://aeraki.net/zh/docs/v1.x/reference/redis/#RedisService) ，我们可以为 Redis 服务注入故障，该功能可以用于混沌测试等场景，以检验系统是否对于 Redis 故障进行了恰当的容错处理。
