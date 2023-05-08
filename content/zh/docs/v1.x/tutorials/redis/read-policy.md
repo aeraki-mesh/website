@@ -4,7 +4,7 @@ description:
 weight: 05
 ---
 
-在 Redis Cluster 中有多个分片（Slot），每个 Redis 分片中，通常有一个 Master 节点，一到多个 Slave（Replica）节点。Master 节点负责写操作，并将数据变化同步到 Slave 节点。Slave 节点作为备份节点，当 Master 不可用时，Slave 可以被选举成为新的 Master。由于 Slave 中保存了和 Master 中相同的数据，因此也可以响应客户端的读操作。
+在 Redis Cluster 中有多个分片（Shard），每个 Redis 分片中，通常有一个 Master 节点，一到多个 Slave（Replica）节点。Master 节点负责写操作，并将数据变化同步到 Slave 节点。Slave 节点作为备份节点，当 Master 不可用时，Slave 可以被选举成为新的 Master。由于 Slave 中保存了和 Master 中相同的数据，因此也可以响应客户端的读操作。
 
 Aeraki Mesh 支持通过 [RedisService](https://aeraki.net/zh/docs/v1.x/reference/redis/#RedisService) 来为 Redis 设置不同的读策略：
 
