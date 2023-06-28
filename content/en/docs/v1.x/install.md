@@ -16,6 +16,7 @@ Before installing Aeraki, please check the supported Istio versions and the corr
 | 1.0.x  |       1.0.x        | 1.10.x |
 | 1.1.x  |       1.1.x        | 1.12.x |
 | 1.2.x  |       1.2.x        | 1.14.x |
+| 1.3.x  |       1.3.x        | 1.16.x |
 
 ### Modify Istio configuration
 
@@ -54,7 +55,7 @@ data:
 ```bash
 git clone https://github.com/aeraki-mesh/aeraki.git
 cd aeraki
-export AERAKI_VERSION=1.0.0
+export AERAKI_TAG=1.3.0
 make install
 ```
 
