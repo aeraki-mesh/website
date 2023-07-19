@@ -1,0 +1,63 @@
+
+
+# UI strings. Buttons and similar.
+
+[ui_pager_prev]
+other = "पहले का"
+
+[ui_pager_next]
+other = "अगला"
+
+[ui_read_more]
+other = "और पढ़ें"
+
+[ui_search]
+other = "इस साईट को खोजें…"
+
+# Used in sentences such as "Posted in News"
+[ui_in]
+other = "में"
+
+# Used in sentences such as "All Tags"
+[ui_all]
+other = "सभी"
+
+# Footer text
+[footer_all_rights_reserved]
+other = "सर्वाधिकार सुरक्षित"
+
+[footer_privacy_policy]
+other = "गोपनीयता नीति"
+
+
+# Post (blog, articles etc.)
+[post_byline_by]
+other = "द्वारा"
+[post_created]
+other = "बनाया था"
+[post_last_mod]
+other = "अंतिम बार संशोधित"
+[post_edit_this]
+other = "इस पृष्ठ को संपादित करें"
+[post_create_child_page]
+other = "चाइल्ड पेज बनाएं"
+[post_create_issue]
+other = "दस्तावेज़ीकरण समस्या बनाएँ"
+[post_create_project_issue]
+other = "प्रोजेक्ट मुद्दा बनाएं"
+[post_posts_in]
+other = "में पोस्ट"
+[post_reading_time]
+other = "मिनट पढ़ें"
+[post_less_than_a_minute_read]
+other = "एक मिनट से कम"
+
+# Print support
+[print_printable_section]
+other = "यह इस अनुभाग का बहु-पृष्ठ मुद्रण योग्य दृश्य है।"
+[print_click_to_print]
+other = "प्रिंट करने के लिए यहां क्लिक करें"
+[print_show_regular]
+other = "इस पृष्ठ के नियमित दृश्य पर वापस लौटें"
+[print_entire_section]
+other = "संपूर्ण अनुभाग प्रिंट करें"
