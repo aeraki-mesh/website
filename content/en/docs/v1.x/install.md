@@ -13,6 +13,7 @@ Before installing Aeraki, please check the supported Istio versions and the corr
 
 | Aeraki | MetaProtocol Proxy | Istio  |
 | :----: | :----------------: | :----: |
+| 1.4.x  |       1.4.x        | 1.18.x |
 | 1.3.x  |       1.3.x        | 1.16.x |
 | 1.2.x  |       1.2.x        | 1.14.x |
 | 1.1.x  |       1.1.x        | 1.12.x |

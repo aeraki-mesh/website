@@ -14,6 +14,9 @@
 - name: 光子工作室
   link: https://guangzi.qq.com/
   image: /img/guangzi.png
+- name: 华为
+  link: https://www.huawei.com/
+  image: /img/huawei.png  
 - name: 欢乐工作室
   link: https://hlddz.qq.com/
   image: /img/happy-studio.png
@@ -46,9 +49,9 @@
 - name: yonghui
   link: https://www.yonghui.com.cn
   image: /img/yonghui.png
-- name: zcy
-  link: https://login.zcygov.cn/
-  image: /img/zcy.png
+# - name: zcy
+#  link: https://login.zcygov.cn/
+#  image: /img/zcy.png
 #- name: Hundsun
 #  link: https://www.hundsun.com/
 #  image: https://www.hundsun.com/assets/img/logo.591f4472.gif
