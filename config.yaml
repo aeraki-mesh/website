@@ -11,7 +11,7 @@ contentDir: content/en
 defaultContentLanguage: en
 defaultContentLanguageInSubdir: false
 languageCode: en-us
-googleAnalytics: UA-109223766-2
+googleAnalytics: G-HP5KDQFVCH
 
 # Useful when translating.
 enableMissingTranslationPlaceholders: true
