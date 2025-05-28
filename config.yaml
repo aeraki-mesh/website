@@ -62,10 +62,8 @@ markup:
 
 params:
   copyright: Aeraki Mesh Authors
-  description: >-
-    Manage any layer-7 protocols in a service mesh
 
-    # Repository configuration (URLs for in-page links to opening issues and suggesting changes)
+  # Repository configuration (URLs for in-page links to opening issues and suggesting changes)
   github_repo: https://github.com/aeraki-mesh/website
   github_branch: main
 
